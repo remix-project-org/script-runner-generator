@@ -1,0 +1,10 @@
+{
+  "name": "script-runner-dynamic",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "yaml": "^2.5.1"
+  }
+}
