@@ -21,6 +21,16 @@ interface ParsedYaml {
   projects: Project[];
 }
 
+// Helper function to deep merge objects (like merging package.json contents)
+const deepMerge = (target: any, source: any): any => {
+  for (const key in source) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+  return { ...target, ...source };
+};
+
 // Read the YAML file
 const fileContent: string = fs.readFileSync(yamlFilePath, 'utf8');
 
@@ -96,18 +106,22 @@ parsedYaml.projects.forEach(project => {
   // Perform the replacements in the template
   const finalTsContent = performReplacements(templateContent, replacements, name, templateDir, defaultTemplateDir);
 
-  // Create the package.json content
-  const packageJson = {
+  // Read the default package.json template
+  const defaultPackageJsonPath = path.join(defaultTemplateDir, 'defaultPackage.json');
+  const defaultPackageJson = JSON.parse(fs.readFileSync(defaultPackageJsonPath, 'utf8'));
+
+  // Create the project-specific package.json content
+  const projectPackageJson = {
     name: name || "default-project-name",
-    version: "1.0.0",
-    main: "index.js",
-    license: "MIT",
     dependencies: dependencies
   };
 
-  // Write the package.json to the project directory
+  // Merge the default package.json with the project-specific content
+  const mergedPackageJson = deepMerge(defaultPackageJson, projectPackageJson);
+
+  // Write the merged package.json to the project directory
   const packageJsonPath = path.join(projectDir, 'package.json');
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  fs.writeFileSync(packageJsonPath, JSON.stringify(mergedPackageJson, null, 2));
 
   // Generate TypeScript import statements
   let tsImports: string = '';
