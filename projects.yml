@@ -1,14 +1,22 @@
 projects:
-  - name: "ethers6"
+  - name: "project-one"
     dependencies:
       ethers: "^6.0.0"
       lodash: "^4.17.21"
-    tsTemplate: "./template.ts"
-    customCode: "./customCode-one.ts"
-  
-  - name: "default"
+    templateDir: "./templates"
+    defaultTemplateDir: "./templates/default"
+    tsTemplate: "template.ts"
+    replacements:
+      CUSTOM_CODE: "customCode-one.ts"
+      ADDITIONAL_LOGIC: "additionalLogic-one.ts"
+
+  - name: "project-two"
     dependencies:
       axios: "^0.21.1"
       moment: "^2.29.1"
-    tsTemplate: "./template.ts"
-    customCode: "./customCode-two.ts"
+    templateDir: "./templates"  
+    defaultTemplateDir: "./templates/default"
+    tsTemplate: "template.ts"
+    replacements:
+      CUSTOM_CODE: "customCode-two.ts"
+      ADDITIONAL_LOGIC: "additionalLogic-default.ts"

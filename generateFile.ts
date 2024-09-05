@@ -11,8 +11,10 @@ const yamlFilePath: string = './projects.yml';
 interface Project {
   name: string;
   dependencies: { [key: string]: string };
-  tsTemplate: string;  // This is a file path
-  customCode: string;  // This is now also a file path
+  templateDir?: string;  // Optional directory containing project-specific template files
+  defaultTemplateDir: string;  // Default directory containing common template files
+  tsTemplate: string;   // Template file name (inside templateDir or defaultTemplateDir)
+  replacements: { [placeholder: string]: string };  // Mapping of placeholders to file paths
 }
 
 interface ParsedYaml {
@@ -25,27 +27,65 @@ const fileContent: string = fs.readFileSync(yamlFilePath, 'utf8');
 // Parse the YAML content
 const parsedYaml: ParsedYaml = yaml.parse(fileContent);
 
+// Helper function to check if a file exists in the project-specific template directory or fallback to default
+const getFilePath = (templateDir: string | undefined, defaultTemplateDir: string, fileName: string): string => {
+  if (templateDir) {
+    const projectSpecificPath = path.join(templateDir, fileName);
+    if (fs.existsSync(projectSpecificPath)) {
+      return projectSpecificPath;
+    }
+  }
+  // Fall back to default template directory if file is not found in the project-specific directory
+  return path.join(defaultTemplateDir, fileName);
+};
+
+// Function to perform replacements in the template
+const performReplacements = (
+  template: string,
+  replacements: { [placeholder: string]: string },
+  templateDir: string | undefined,
+  defaultTemplateDir: string
+): string => {
+  let updatedTemplate = template;
+
+  // Iterate through each placeholder and its corresponding file
+  Object.entries(replacements).forEach(([placeholder, fileName]) => {
+    // Get the full path to the replacement file (use project-specific or default template)
+    const filePath = getFilePath(templateDir, defaultTemplateDir, fileName);
+    
+    // Read the content of the file that corresponds to the placeholder
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    
+    // Replace the placeholder in the template with the file content
+    updatedTemplate = updatedTemplate.replace(new RegExp(`{{${placeholder}}}`, 'g'), fileContent);
+  });
+
+  return updatedTemplate;
+};
+
 // Loop over each project in the YAML
 parsedYaml.projects.forEach(project => {
-  const { name, dependencies, tsTemplate, customCode } = project;
+  const { name, dependencies, templateDir, defaultTemplateDir, tsTemplate, replacements } = project;
 
-  // Set up the project directory
+  // Set up the project directory inside the "projects" subdirectory
   const projectDir = path.join(__dirname, 'projects', name);
-  console.log(`Creating project in ${projectDir}...`);
 
   // Ensure the project directory is clean by creating it if it doesn't exist
   if (!fs.existsSync(projectDir)) {
-    fs.mkdirSync(projectDir);
+    fs.mkdirSync(projectDir, { recursive: true });
   } else {
     console.log(`Directory ${projectDir} already exists. Please use a different project name or clean up the folder.`);
     return;  // Skip to the next project if the folder exists
   }
 
-  // Read the TypeScript template file
-  const templateContent: string = fs.readFileSync(tsTemplate, 'utf8');
+  // Construct the full path to the TypeScript template file (use project-specific or default template)
+  const tsTemplatePath = getFilePath(templateDir, defaultTemplateDir, tsTemplate);
 
-  // Read the custom code from the file
-  const customCodeContent: string = fs.readFileSync(customCode, 'utf8');
+  // Read the TypeScript template file
+  const templateContent: string = fs.readFileSync(tsTemplatePath, 'utf8');
+
+  // Perform the replacements in the template
+  const finalTsContent = performReplacements(templateContent, replacements, templateDir, defaultTemplateDir);
 
   // Create the package.json content
   const packageJson = {
@@ -66,10 +106,7 @@ parsedYaml.projects.forEach(project => {
     tsImports += `import * as ${dep.replace(/[^a-zA-Z0-9]/g, '_')} from '${dep}';\n`;
   });
 
-  // Replace the placeholder in the template with the custom code content
-  const finalTsContent = templateContent.replace('/* CUSTOM_CODE_PLACEHOLDER */', customCodeContent);
-
-  // Combine imports and the template with custom code
+  // Combine imports and the processed template content
   const fullTsContent = `${tsImports}\n${finalTsContent}`;
 
   // Write the generated TypeScript content to the project directory
@@ -80,6 +117,6 @@ parsedYaml.projects.forEach(project => {
   console.log(`Installing dependencies in ${projectDir}...`);
   execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
 
-  console.log(`Project ${name} has been created and dependencies installed.`);
+  console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);
   console.log(`Generated TypeScript file at ${outputTsFilePath}`);
 });
