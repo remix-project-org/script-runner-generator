@@ -27,16 +27,16 @@ const fileContent: string = fs.readFileSync(yamlFilePath, 'utf8');
 // Parse the YAML content
 const parsedYaml: ParsedYaml = yaml.parse(fileContent);
 
-// Helper function to check if a project-specific file exists, then fallback to project-independent, then default
+// Helper function to check if a project-specific file exists in the project's subdirectory of templateDir
 const getFilePath = (projectName: string, templateDir: string | undefined, defaultTemplateDir: string, fileName: string): string => {
   if (templateDir) {
-    // Check for project-specific file first (e.g., project-one-customCode.ts)
-    const projectSpecificPath = path.join(templateDir, `${projectName}-${fileName}`);
+    // Check for project-specific file first (e.g., templates/custom/project-one/customCode.ts)
+    const projectSpecificPath = path.join(templateDir, projectName, fileName);
     if (fs.existsSync(projectSpecificPath)) {
       return projectSpecificPath;
     }
     
-    // Fallback to project-independent file (e.g., customCode.ts)
+    // Fallback to templateDir without project subdirectory (generic file in custom templateDir)
     const projectIndependentPath = path.join(templateDir, fileName);
     if (fs.existsSync(projectIndependentPath)) {
       return projectIndependentPath;
@@ -78,13 +78,14 @@ parsedYaml.projects.forEach(project => {
   // Set up the project directory inside the "projects" subdirectory
   const projectDir = path.join(__dirname, 'projects', name);
 
-  // Ensure the project directory is clean by creating it if it doesn't exist
-  if (!fs.existsSync(projectDir)) {
-    fs.mkdirSync(projectDir, { recursive: true });
-  } else {
-    console.log(`Directory ${projectDir} already exists. Please use a different project name or clean up the folder.`);
-    return;  // Skip to the next project if the folder exists
+  // If the project directory exists, delete it
+  if (fs.existsSync(projectDir)) {
+    console.log(`Directory ${projectDir} already exists. Deleting it...`);
+    fs.rmSync(projectDir, { recursive: true, force: true });
   }
+
+  // Create a fresh project directory
+  fs.mkdirSync(projectDir, { recursive: true });
 
   // Construct the full path to the TypeScript template file (use project-specific or default template)
   const tsTemplatePath = getFilePath(name, templateDir, defaultTemplateDir, tsTemplate);
