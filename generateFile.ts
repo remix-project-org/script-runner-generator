@@ -31,6 +31,26 @@ const deepMerge = (target: any, source: any): any => {
   return { ...target, ...source };
 };
 
+// Helper function to recursively copy directories and files
+const copyRecursiveSync = (src: string, dest: string) => {
+  if (fs.existsSync(src)) {
+    const stats = fs.statSync(src);
+    const isDirectory = stats.isDirectory();
+    if (isDirectory) {
+      if (!fs.existsSync(dest)) {
+        fs.mkdirSync(dest);
+      }
+      fs.readdirSync(src).forEach((file) => {
+        const currentSrc = path.join(src, file);
+        const currentDest = path.join(dest, file);
+        copyRecursiveSync(currentSrc, currentDest);
+      });
+    } else {
+      fs.copyFileSync(src, dest);
+    }
+  }
+};
+
 // Read the YAML file
 const fileContent: string = fs.readFileSync(yamlFilePath, 'utf8');
 
@@ -79,6 +99,29 @@ const performReplacements = (
   });
 
   return updatedTemplate;
+};
+
+// Function to copy only files from the `files` subdirectory of the template directories
+const copyTemplateFiles = (projectName: string, templateDir: string | undefined, defaultTemplateDir: string, projectDir: string) => {
+  // Project-specific files directory
+  if (templateDir) {
+    const projectSpecificFilesDir = path.join(templateDir, projectName, 'files');
+    if (fs.existsSync(projectSpecificFilesDir)) {
+      copyRecursiveSync(projectSpecificFilesDir, projectDir);
+    }
+
+    // Generic files directory within templateDir
+    const genericFilesDir = path.join(templateDir, 'files');
+    if (fs.existsSync(genericFilesDir)) {
+      copyRecursiveSync(genericFilesDir, projectDir);
+    }
+  }
+
+  // Default files directory within defaultTemplateDir
+  const defaultFilesDir = path.join(defaultTemplateDir, 'files');
+  if (fs.existsSync(defaultFilesDir)) {
+    copyRecursiveSync(defaultFilesDir, projectDir);
+  }
 };
 
 // Loop over each project in the YAML
@@ -135,6 +178,9 @@ parsedYaml.projects.forEach(project => {
   // Write the generated TypeScript content to the project directory
   const outputTsFilePath = path.join(projectDir, 'generatedImports.ts');
   fs.writeFileSync(outputTsFilePath, fullTsContent);
+
+  // Copy only files from the `files` subdirectory of both the template and default template directories
+  copyTemplateFiles(name, templateDir, defaultTemplateDir, projectDir);
 
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);
