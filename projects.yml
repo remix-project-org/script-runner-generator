@@ -1,0 +1,14 @@
+projects:
+  - name: "ethers6"
+    dependencies:
+      ethers: "^6.0.0"
+      lodash: "^4.17.21"
+    tsTemplate: "./template.ts"
+    customCode: "./customCode-one.ts"
+  
+  - name: "default"
+    dependencies:
+      axios: "^0.21.1"
+      moment: "^2.29.1"
+    tsTemplate: "./template.ts"
+    customCode: "./customCode-two.ts"

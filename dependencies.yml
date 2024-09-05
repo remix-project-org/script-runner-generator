@@ -1,8 +1,0 @@
-name: "custom-ts-project"
-dependencies:
-  ethers: "^6.0.0"
-  lodash: "^4.17.21"
-  axios: "^0.21.1"
-tsTemplate: "./template.ts"  # Path to the TypeScript template file
-customCode: |
-  console.log("This is custom code inserted into the template.");
