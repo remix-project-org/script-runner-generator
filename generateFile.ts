@@ -27,12 +27,19 @@ const fileContent: string = fs.readFileSync(yamlFilePath, 'utf8');
 // Parse the YAML content
 const parsedYaml: ParsedYaml = yaml.parse(fileContent);
 
-// Helper function to check if a file exists in the project-specific template directory or fallback to default
-const getFilePath = (templateDir: string | undefined, defaultTemplateDir: string, fileName: string): string => {
+// Helper function to check if a project-specific file exists, then fallback to project-independent, then default
+const getFilePath = (projectName: string, templateDir: string | undefined, defaultTemplateDir: string, fileName: string): string => {
   if (templateDir) {
-    const projectSpecificPath = path.join(templateDir, fileName);
+    // Check for project-specific file first (e.g., project-one-customCode.ts)
+    const projectSpecificPath = path.join(templateDir, `${projectName}-${fileName}`);
     if (fs.existsSync(projectSpecificPath)) {
       return projectSpecificPath;
+    }
+    
+    // Fallback to project-independent file (e.g., customCode.ts)
+    const projectIndependentPath = path.join(templateDir, fileName);
+    if (fs.existsSync(projectIndependentPath)) {
+      return projectIndependentPath;
     }
   }
   // Fall back to default template directory if file is not found in the project-specific directory
@@ -43,6 +50,7 @@ const getFilePath = (templateDir: string | undefined, defaultTemplateDir: string
 const performReplacements = (
   template: string,
   replacements: { [placeholder: string]: string },
+  projectName: string,
   templateDir: string | undefined,
   defaultTemplateDir: string
 ): string => {
@@ -51,7 +59,7 @@ const performReplacements = (
   // Iterate through each placeholder and its corresponding file
   Object.entries(replacements).forEach(([placeholder, fileName]) => {
     // Get the full path to the replacement file (use project-specific or default template)
-    const filePath = getFilePath(templateDir, defaultTemplateDir, fileName);
+    const filePath = getFilePath(projectName, templateDir, defaultTemplateDir, fileName);
     
     // Read the content of the file that corresponds to the placeholder
     const fileContent = fs.readFileSync(filePath, 'utf8');
@@ -79,13 +87,13 @@ parsedYaml.projects.forEach(project => {
   }
 
   // Construct the full path to the TypeScript template file (use project-specific or default template)
-  const tsTemplatePath = getFilePath(templateDir, defaultTemplateDir, tsTemplate);
+  const tsTemplatePath = getFilePath(name, templateDir, defaultTemplateDir, tsTemplate);
 
   // Read the TypeScript template file
   const templateContent: string = fs.readFileSync(tsTemplatePath, 'utf8');
 
   // Perform the replacements in the template
-  const finalTsContent = performReplacements(templateContent, replacements, templateDir, defaultTemplateDir);
+  const finalTsContent = performReplacements(templateContent, replacements, name, templateDir, defaultTemplateDir);
 
   // Create the package.json content
   const packageJson = {
