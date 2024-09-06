@@ -1,25 +1,8 @@
 // Import required modules
 import * as fs from 'fs';
-import * as yaml from 'yaml';
 import { execSync } from 'child_process';
 import * as path from 'path';
-
-// Define the paths for the YAML file
-const yamlFilePath: string = './projects.yml';
-
-// Define the interface for the parsed YAML structure
-interface Project {
-  name: string;
-  dependencies: { [key: string]: string };
-  templateDir?: string;  // Optional directory containing project-specific template files
-  defaultTemplateDir: string;  // Default directory containing common template files
-  tsTemplate: string;   // Template file name (inside templateDir or defaultTemplateDir)
-  replacements: { [placeholder: string]: string };  // Mapping of placeholders to file paths
-}
-
-interface ParsedYaml {
-  projects: Project[];
-}
+import { projectConfigs, ProjectConfiguration, Dependency } from './project-configurations'; // Import the project configurations
 
 // Helper function to deep merge objects (like merging package.json contents)
 const deepMerge = (target: any, source: any): any => {
@@ -50,12 +33,6 @@ const copyRecursiveSync = (src: string, dest: string) => {
     }
   }
 };
-
-// Read the YAML file
-const fileContent: string = fs.readFileSync(yamlFilePath, 'utf8');
-
-// Parse the YAML content
-const parsedYaml: ParsedYaml = yaml.parse(fileContent);
 
 // Helper function to check if a project-specific file exists in the project's subdirectory of templateDir
 const getFilePath = (projectName: string, templateDir: string | undefined, defaultTemplateDir: string, fileName: string): string => {
@@ -120,13 +97,31 @@ const copyTemplateFiles = (src: string, projectName: string, templateDir: string
   // Default files directory within defaultTemplateDir
   const defaultFilesDir = path.join(defaultTemplateDir, src);
   if (fs.existsSync(defaultFilesDir)) {
-    copyRecursiveSync(defaultFilesDir, projectDir);
+      copyRecursiveSync(defaultFilesDir, projectDir);
   }
 };
 
-// Loop over each project in the YAML
-parsedYaml.projects.forEach(project => {
+// Function to determine if a dependency should be imported or required
+const generateImportStatement = (dep: Dependency): string => {
+  console.log(`Generating import statement for ${dep.name}...`);
+  if (dep.import === false) {
+    return ''; // No import or require for this dependency
+  }
+
+  if (dep.require) {
+    const alias = dep.alias || dep.name;
+    return `const ${alias.replace(/[^a-zA-Z0-9]/g, '_')} = require('${dep.name}');\n`;
+  }
+
+  const alias = dep.alias || dep.name;
+  return `import * as ${alias.replace(/[^a-zA-Z0-9]/g, '_')} from '${dep.name}';\n`;
+};
+
+// Loop over each project in the projectConfigs array
+projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   const { name, dependencies, templateDir, defaultTemplateDir, tsTemplate, replacements } = project;
+
+  console.log(`Creating project ${name}...`, dependencies);
 
   // Set up the project directory inside the "projects" subdirectory
   const projectDir = path.join(__dirname, 'projects', name);
@@ -153,13 +148,15 @@ parsedYaml.projects.forEach(project => {
   const defaultPackageJsonPath = path.join(defaultTemplateDir, 'defaultPackage.json');
   const defaultPackageJson = JSON.parse(fs.readFileSync(defaultPackageJsonPath, 'utf8'));
 
-  console.log(`Creating project ${name}...`, dependencies);
   // Create the project-specific package.json content
   const projectPackageJson = {
     name: name || "default-project-name",
-    dependencies: dependencies
+    dependencies: dependencies.reduce((acc, dep) => {
+      acc[dep.name] = dep.version;
+      return acc;
+    }, {} as { [key: string]: string })
   };
-  const originalDependencies = { ...dependencies }
+
   // Merge the default package.json with the project-specific content
   const mergedPackageJson = deepMerge(defaultPackageJson, projectPackageJson);
 
@@ -169,36 +166,38 @@ parsedYaml.projects.forEach(project => {
 
   // Generate TypeScript import statements
   let tsImports: string = '';
-  Object.keys(originalDependencies).forEach(dep => {
-    tsImports += `import * as ${dep.replace(/[^a-zA-Z0-9]/g, '_')} from '${dep}';\n`;
+  dependencies.forEach(dep => {
+    // Only generate imports/require for dependencies that aren't in the default package.json
+    //if (!defaultPackageJson.dependencies || !defaultPackageJson.dependencies[dep.name]) {
+      tsImports += generateImportStatement(dep);
+    //}
   });
 
   // Combine imports and the processed template content
   const fullTsContent = `${tsImports}\n${finalTsContent}`;
 
-  // create src directory
+  // Create src directory
   const srcDir = path.join(projectDir, 'src');
   fs.mkdirSync(srcDir, { recursive: true });
 
   // Write the generated TypeScript content to the project directory
-  const outputTsFilePath = path.join(projectDir, 'src', 'script-runner.ts');
+  const outputTsFilePath = path.join(srcDir, 'script-runner.ts');
   fs.writeFileSync(outputTsFilePath, fullTsContent);
 
   // Copy only files from the `files` subdirectory of both the template and default template directories
-  const filesDir = path.join(projectDir, 'src')
+  const filesDir = path.join(srcDir);
   copyTemplateFiles('files', name, templateDir, defaultTemplateDir, filesDir);
 
   // Copy only files from the `config` subdirectory of both the template and default template directories
-  const configDir = projectDir
+  const configDir = projectDir;
   copyTemplateFiles('config', name, templateDir, defaultTemplateDir, configDir);
 
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);
-  //execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
-  //execSync('yarn build', { cwd: projectDir, stdio: 'inherit' });
+  // execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
+  // execSync('yarn build', { cwd: projectDir, stdio: 'inherit' });
 
-  //console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);
+  // Console log for successful project generation
+  console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);
   console.log(`Generated TypeScript file at ${outputTsFilePath}`);
-
-
 });

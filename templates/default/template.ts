@@ -1,4 +1,6 @@
 // Imports will be generated here
+import * as web3Js from 'web3'
+import Web3 from 'web3'
 
 // Custom code starts here
 {{CUSTOM_CODE}}
