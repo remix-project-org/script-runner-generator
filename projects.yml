@@ -1,8 +1,10 @@
 projects:
   - name: "project-one"
     dependencies:
-      ethers: "^6.0.0"
-      lodash: "^4.17.21"
+      ethers: 
+        version: "^6.0.0"
+      lodash: 
+        version: "^4.17.21"
     templateDir: "./templates/"
     defaultTemplateDir: "./templates/default"
     tsTemplate: "template.ts"
@@ -12,8 +14,10 @@ projects:
 
   - name: "project-two"
     dependencies:
-      axios: "^0.21.1"
-      moment: "^2.29.1"
+      axios:
+        version: "^2.21.1"
+      moment:
+        version: "^2.29.1"
     templateDir: "./templates/"
     defaultTemplateDir: "./templates/default"
     tsTemplate: "template.ts"

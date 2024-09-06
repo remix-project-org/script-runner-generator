@@ -153,12 +153,13 @@ parsedYaml.projects.forEach(project => {
   const defaultPackageJsonPath = path.join(defaultTemplateDir, 'defaultPackage.json');
   const defaultPackageJson = JSON.parse(fs.readFileSync(defaultPackageJsonPath, 'utf8'));
 
+  console.log(`Creating project ${name}...`, dependencies);
   // Create the project-specific package.json content
   const projectPackageJson = {
     name: name || "default-project-name",
     dependencies: dependencies
   };
-
+  const originalDependencies = { ...dependencies }
   // Merge the default package.json with the project-specific content
   const mergedPackageJson = deepMerge(defaultPackageJson, projectPackageJson);
 
@@ -168,7 +169,7 @@ parsedYaml.projects.forEach(project => {
 
   // Generate TypeScript import statements
   let tsImports: string = '';
-  Object.keys(dependencies).forEach(dep => {
+  Object.keys(originalDependencies).forEach(dep => {
     tsImports += `import * as ${dep.replace(/[^a-zA-Z0-9]/g, '_')} from '${dep}';\n`;
   });
 
@@ -193,16 +194,11 @@ parsedYaml.projects.forEach(project => {
 
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);
-  execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
+  //execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
+  //execSync('yarn build', { cwd: projectDir, stdio: 'inherit' });
 
-  console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);
+  //console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);
   console.log(`Generated TypeScript file at ${outputTsFilePath}`);
-
-  // copy index.html from root to build
-  const indexHtmlPath = path.join(__dirname, 'index.html');
-  const buildIndexHtmlPath = path.join('build', 'index.html');
-  fs.copyFileSync(indexHtmlPath, buildIndexHtmlPath);
-  console.log(`Copied index.html to ${buildIndexHtmlPath}`);
 
 
 });
