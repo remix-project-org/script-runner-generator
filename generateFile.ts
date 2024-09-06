@@ -129,7 +129,7 @@ parsedYaml.projects.forEach(project => {
   const { name, dependencies, templateDir, defaultTemplateDir, tsTemplate, replacements } = project;
 
   // Set up the project directory inside the "projects" subdirectory
-  const projectDir = path.join(__dirname, 'projects', name);
+  const projectDir = path.join(__dirname, 'build', name);
 
   // If the project directory exists, delete it
   if (fs.existsSync(projectDir)) {
@@ -188,4 +188,12 @@ parsedYaml.projects.forEach(project => {
 
   console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);
   console.log(`Generated TypeScript file at ${outputTsFilePath}`);
+
+  // copy index.html from root to build
+  const indexHtmlPath = path.join(__dirname, 'index.html');
+  const buildIndexHtmlPath = path.join('build', 'index.html');
+  fs.copyFileSync(indexHtmlPath, buildIndexHtmlPath);
+  console.log(`Copied index.html to ${buildIndexHtmlPath}`);
+
+
 });
