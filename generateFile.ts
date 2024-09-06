@@ -65,7 +65,7 @@ const getFilePath = (projectName: string, templateDir: string | undefined, defau
     if (fs.existsSync(projectSpecificPath)) {
       return projectSpecificPath;
     }
-    
+
     // Fallback to templateDir without project subdirectory (generic file in custom templateDir)
     const projectIndependentPath = path.join(templateDir, fileName);
     if (fs.existsSync(projectIndependentPath)) {
@@ -90,10 +90,10 @@ const performReplacements = (
   Object.entries(replacements).forEach(([placeholder, fileName]) => {
     // Get the full path to the replacement file (use project-specific or default template)
     const filePath = getFilePath(projectName, templateDir, defaultTemplateDir, fileName);
-    
+
     // Read the content of the file that corresponds to the placeholder
     const fileContent = fs.readFileSync(filePath, 'utf8');
-    
+
     // Replace the placeholder in the template with the file content
     updatedTemplate = updatedTemplate.replace(new RegExp(`{{${placeholder}}}`, 'g'), fileContent);
   });
@@ -102,23 +102,23 @@ const performReplacements = (
 };
 
 // Function to copy only files from the `files` subdirectory of the template directories
-const copyTemplateFiles = (projectName: string, templateDir: string | undefined, defaultTemplateDir: string, projectDir: string) => {
+const copyTemplateFiles = (src: string, projectName: string, templateDir: string | undefined, defaultTemplateDir: string, projectDir: string) => {
   // Project-specific files directory
   if (templateDir) {
-    const projectSpecificFilesDir = path.join(templateDir, projectName, 'files');
+    const projectSpecificFilesDir = path.join(templateDir, projectName, src);
     if (fs.existsSync(projectSpecificFilesDir)) {
       copyRecursiveSync(projectSpecificFilesDir, projectDir);
     }
 
     // Generic files directory within templateDir
-    const genericFilesDir = path.join(templateDir, 'files');
+    const genericFilesDir = path.join(templateDir, src);
     if (fs.existsSync(genericFilesDir)) {
       copyRecursiveSync(genericFilesDir, projectDir);
     }
   }
 
   // Default files directory within defaultTemplateDir
-  const defaultFilesDir = path.join(defaultTemplateDir, 'files');
+  const defaultFilesDir = path.join(defaultTemplateDir, src);
   if (fs.existsSync(defaultFilesDir)) {
     copyRecursiveSync(defaultFilesDir, projectDir);
   }
@@ -129,7 +129,7 @@ parsedYaml.projects.forEach(project => {
   const { name, dependencies, templateDir, defaultTemplateDir, tsTemplate, replacements } = project;
 
   // Set up the project directory inside the "projects" subdirectory
-  const projectDir = path.join(__dirname, 'build', name);
+  const projectDir = path.join(__dirname, 'projects', name);
 
   // If the project directory exists, delete it
   if (fs.existsSync(projectDir)) {
@@ -175,12 +175,21 @@ parsedYaml.projects.forEach(project => {
   // Combine imports and the processed template content
   const fullTsContent = `${tsImports}\n${finalTsContent}`;
 
+  // create src directory
+  const srcDir = path.join(projectDir, 'src');
+  fs.mkdirSync(srcDir, { recursive: true });
+
   // Write the generated TypeScript content to the project directory
-  const outputTsFilePath = path.join(projectDir, 'generatedImports.ts');
+  const outputTsFilePath = path.join(projectDir, 'src', 'script-runner.ts');
   fs.writeFileSync(outputTsFilePath, fullTsContent);
 
   // Copy only files from the `files` subdirectory of both the template and default template directories
-  copyTemplateFiles(name, templateDir, defaultTemplateDir, projectDir);
+  const filesDir = path.join(projectDir, 'src')
+  copyTemplateFiles('files', name, templateDir, defaultTemplateDir, filesDir);
+
+  // Copy only files from the `config` subdirectory of both the template and default template directories
+  const configDir = projectDir
+  copyTemplateFiles('config', name, templateDir, defaultTemplateDir, configDir);
 
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);

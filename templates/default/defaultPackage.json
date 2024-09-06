@@ -3,11 +3,15 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-      "build": "tsc",
-      "test": "jest"
+      "build": "webpack --config webpack.config.js"
     },
     "dependencies": {
-      "typescript": "^4.0.0"
+      "typescript": "^5.4.5"
+    },
+    "devDependencies": {
+      "ts-loader": "^9.5.1",
+      "webpack-bundle-analyzer": "^4.10.2",
+      "webpack-cli": "^4.10.0"
     }
   }
   

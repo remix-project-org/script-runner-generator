@@ -1,2 +1,16 @@
 node_modules
-build/
+build/*
+build/projects
+build/projects/*
+projects/
+
+# But not .wasm or .html files in the build directory
+!build/*.wasm
+!build/*.html
+
+# Re-include the build directory itself to allow checking its content
+!build/
+
+# Re-include directories within build, to recurse into them
+!build/*/
+yarn-error.log
