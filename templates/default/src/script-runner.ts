@@ -7,17 +7,8 @@ declare global {
 // Imports will be generated here
 import * as web3Js from 'web3'
 import Web3 from 'web3'
+import { fileContents, scriptReturns } from './lib';
 
-// Custom code starts here
-//{{CUSTOM_CODE}}
-// Custom code ends here
-
-// Additional logic starts here
-//{{ADDITIONAL_LOGIC}}
-// Additional logic ends here
-
-const scriptReturns = {} // keep track of modules exported values
-const fileContents = {} // keep track of file content
 window.require = (module: string) => {
   if (module === 'web3') return web3Js
   if (window[module]) return window[module] // library
@@ -27,3 +18,5 @@ window.require = (module: string) => {
   else throw new Error(`${module} module require is not supported by Remix IDE`)
 }
 
+import './lib/codeExecutor'
+import './lib/console'

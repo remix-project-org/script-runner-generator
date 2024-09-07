@@ -7,6 +7,13 @@
     "install:project": "./installProject.bash",
     "build:project": "./buildProject.bash"
   },
+  "dependencies": {
+    "@remixproject/plugin": "^0.3.42",
+    "@remixproject/plugin-iframe": "^0.3.42",
+    "mocha": "^10.7.3",
+    "web3": "^4.12.1",
+    "web3-validator": "^2.0.6"
+  },
   "devDependencies": {
     "typescript": "^5.5.4",
     "yaml": "^2.5.1"

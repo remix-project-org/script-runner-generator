@@ -1,6 +1,9 @@
 import { createClient } from '@remixproject/plugin-iframe'
 import { PluginClient } from '@remixproject/plugin'
 import { TranspileOutput } from "typescript"
+import * as path from 'path'
+import './runWithMocha'
+import { fileContents, scriptReturns } from '.';
 declare global {
   interface Window {
     [key: string]: any;
@@ -54,7 +57,7 @@ class CodeExecutor extends PluginClient {
           mocha.run()
         } 
         return returns
-      } catch (e) {
+      } catch (e: any) {
         this.emit('error', {
           data: [e.message]
         })
@@ -62,17 +65,17 @@ class CodeExecutor extends PluginClient {
     }
   }
 
-  async _resolveFile (fileName) {
-    if (await this.call('fileManager', 'exists', fileName)) return await this.call('fileManager', 'readFile', fileName)
-    if (await this.call('fileManager', 'exists', fileName + '.ts')) return await this.call('fileManager', 'readFile', fileName + '.ts')
-    if (await this.call('fileManager', 'exists', fileName + '.js')) return await this.call('fileManager', 'readFile', fileName + '.js')
+  async _resolveFile (fileName: string) {
+    if (await this.call('fileManager' as any, 'exists', fileName)) return await this.call('fileManager', 'readFile', fileName)
+    if (await this.call('fileManager' as any, 'exists', fileName + '.ts')) return await this.call('fileManager', 'readFile', fileName + '.ts')
+    if (await this.call('fileManager' as any, 'exists', fileName + '.js')) return await this.call('fileManager', 'readFile', fileName + '.js')
   }
 
-  async executeFile (fileName) {
+  async executeFile (fileName: string) {
     try {
       if (require(fileName)) return require(fileName)
     } catch (e) {}
-    const content = await this._resolveFile(fileName)
+    const content = await this._resolveFile(fileName) || ''
     const returns = await this.execute(content, fileName)
     return {returns, content}
   }
