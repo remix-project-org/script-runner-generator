@@ -16,6 +16,7 @@ const deepMerge = (target: any, source: any): any => {
 
 // Helper function to recursively copy directories and files
 const copyRecursiveSync = (src: string, dest: string) => {
+  console.log(`Copying ${src} to ${dest}`);
   if (fs.existsSync(src)) {
     const stats = fs.statSync(src);
     const isDirectory = stats.isDirectory();
@@ -72,7 +73,7 @@ const performReplacements = (
     const fileContent = fs.readFileSync(filePath, 'utf8');
 
     // Replace the placeholder in the template with the file content
-    updatedTemplate = updatedTemplate.replace(new RegExp(`{{${placeholder}}}`, 'g'), fileContent);
+    updatedTemplate = updatedTemplate.replace(new RegExp(`//{{${placeholder}}}`, 'g'), fileContent);
   });
 
   return updatedTemplate;
@@ -101,20 +102,31 @@ const copyTemplateFiles = (src: string, projectName: string, templateDir: string
   }
 };
 
-// Function to determine if a dependency should be imported or required
+// Function to determine if a dependency should be imported, required, or added to window object
 const generateImportStatement = (dep: Dependency): string => {
-  console.log(`Generating import statement for ${dep.name}...`);
+  let importStatement = '';
+
+  // Skip if import is set to false
   if (dep.import === false) {
-    return ''; // No import or require for this dependency
+    return '';
   }
 
+  // Use require if specified
   if (dep.require) {
     const alias = dep.alias || dep.name;
-    return `const ${alias.replace(/[^a-zA-Z0-9]/g, '_')} = require('${dep.name}');\n`;
+    importStatement = `const ${alias.replace(/[^a-zA-Z0-9]/g, '_')} = require('${dep.name}');\n`;
+  } else {
+    const alias = dep.alias || dep.name;
+    importStatement = `import * as ${alias.replace(/[^a-zA-Z0-9]/g, '_')} from '${dep.name}';\n`;
   }
 
-  const alias = dep.alias || dep.name;
-  return `import * as ${alias.replace(/[^a-zA-Z0-9]/g, '_')} from '${dep.name}';\n`;
+  // If windowImport is true, add the window assignment
+  if (dep.windowImport) {
+    const alias = dep.alias || dep.name;
+    importStatement += `window['${dep.name}'] = ${alias.replace(/[^a-zA-Z0-9]/g, '_')};\n`;
+  }
+
+  return importStatement;
 };
 
 // Loop over each project in the projectConfigs array
@@ -167,10 +179,7 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   // Generate TypeScript import statements
   let tsImports: string = '';
   dependencies.forEach(dep => {
-    // Only generate imports/require for dependencies that aren't in the default package.json
-    //if (!defaultPackageJson.dependencies || !defaultPackageJson.dependencies[dep.name]) {
       tsImports += generateImportStatement(dep);
-    //}
   });
 
   // Combine imports and the processed template content
@@ -185,12 +194,16 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   fs.writeFileSync(outputTsFilePath, fullTsContent);
 
   // Copy only files from the `files` subdirectory of both the template and default template directories
-  const filesDir = path.join(srcDir);
-  copyTemplateFiles('files', name, templateDir, defaultTemplateDir, filesDir);
+  const filesDir = path.join(srcDir, 'lib');
+  copyTemplateFiles('src/lib', name, templateDir, defaultTemplateDir, filesDir);
 
-  // Copy only files from the `config` subdirectory of both the template and default template directories
-  const configDir = projectDir;
-  copyTemplateFiles('config', name, templateDir, defaultTemplateDir, configDir);
+  // Copy webpack.config.js file to the project directory
+  const configDir = path.join(projectDir, 'webpack.config.js');
+  copyTemplateFiles('webpack.config.js', name, templateDir, defaultTemplateDir, configDir);
+
+  // copy tsconfig.json file to the project directory
+  const tsconfigDir = path.join(projectDir, 'tsconfig.json');
+  copyTemplateFiles('tsconfig.json', name, templateDir, defaultTemplateDir, tsconfigDir);
 
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);

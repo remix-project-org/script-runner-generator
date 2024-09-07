@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "install:project": "./installProject.bash",
+    "build:project": "./buildProject.bash"
+  },
   "devDependencies": {
     "typescript": "^5.5.4",
     "yaml": "^2.5.1"

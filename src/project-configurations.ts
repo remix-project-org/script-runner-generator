@@ -4,6 +4,7 @@ export interface Dependency {
     alias?: string;
     import: boolean;
     require?: boolean;
+    windowImport?: boolean;
   }
   
   export interface Replacements {
@@ -35,17 +36,13 @@ export interface Dependency {
             name: "ethers",
             alias: "ethersJS",
             import: true,
-          },
-          {
-            version: "0.7.0",
-            name: "snarkjs",
-            import: true,
-            require: true,
+            windowImport: true,
           },
           {
             version: "^4",
             name: "multihashes",
             import: true,
+            windowImport: true,
           },
           {
             version: "^1.5.3",
@@ -55,10 +52,8 @@ export interface Dependency {
         ],
         templateDir: "./templates/",
         defaultTemplateDir: "./templates/default",
-        tsTemplate: "template.ts",
+        tsTemplate: "src/script-runner.ts",
         replacements: {
-          CUSTOM_CODE: "customCode.ts",
-          ADDITIONAL_LOGIC: "additionalLogic.ts",
         },
       },
       // Add other projects here as needed
