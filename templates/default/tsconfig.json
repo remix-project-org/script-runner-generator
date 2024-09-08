@@ -4,8 +4,7 @@
       "module": "commonjs",
       "strict": true,
       "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "allowSyntheticDefaultImports": true
     },
     "include": ["src/**/*.ts", "global.d.ts"],
     "exclude": ["node_modules"]

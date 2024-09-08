@@ -29,7 +29,7 @@ window.require = (module: string) => {
         console.log('web3Js', web3Js)
         const testclass = new web3Js.default(testweb3Provider)
         console.log('testclass', testclass)
-        return web3Js
+        return web3Js.default
     }
     if (window[module]) return window[module] // library
     if (window['_' + module]) return window['_' + module] // library

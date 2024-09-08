@@ -7,9 +7,9 @@ window.web3Provider = {
     }
 }
 // ts-ignore
-//window.provider = window.web3Provider
+window.provider = window.web3Provider
 // ts-ignore
-//window.ethereum = window.web3Provider
+window.ethereum = window.web3Provider
 
 window.web3 = new Web3(window.web3Provider)
 
