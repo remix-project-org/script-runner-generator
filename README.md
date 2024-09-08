@@ -9,6 +9,10 @@
 A project is a custom script runner build that has certain imports added to it, like starknet or sindri. It contains node_modules you specify on top of the 'default' template. You can generate projects by adding them to a configuration file. 
 /src/project-configurations.ts
 
+### how it's published
+
+there is one index with a little script that accpets a ?template= and then loads the script-runner that is required from a projects/ subdirectory
+
 ### templates
 
 In the templates directory you will find a default template which is used for all projects.
