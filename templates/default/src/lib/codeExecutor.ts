@@ -26,9 +26,6 @@ window.require = (module: string) => {
     console.log('window.require', module)
     console.log(scriptReturns, fileContents)
     if (module === 'web3') {
-        console.log('web3Js', web3Js)
-        const testclass = new web3Js.default(testweb3Provider)
-        console.log('testclass', testclass)
         return web3Js.default
     }
     if (window[module]) return window[module] // library
@@ -57,7 +54,7 @@ class CodeExecutor extends PluginClient {
           }
         });
         script = transpiled.outputText;
-        console.log('transpiled', transpiled.outputText)
+        //console.log('transpiled', transpiled.outputText)
         // extract all the "require", execute them and store the returned values.
         const regexp = /require\((.*?)\)/g
         const array = [...script.matchAll(regexp)];
@@ -82,9 +79,9 @@ class CodeExecutor extends PluginClient {
                   window.__execPath__ = "${fromPath}"
                   ${script};
                   return exports || module.exports`
-        console.log('script', script, scriptReturns, fileContents)
+        //console.log('script', script, scriptReturns, fileContents)
         const returns = (new Function(script))()
-        console.log('returns', returns, scriptReturns, fileContents)
+        //console.log('returns', returns, scriptReturns, fileContents)
         if (mocha.suite && ((mocha.suite.suites && mocha.suite.suites.length) || (mocha.suite.tests && mocha.suite.tests.length))) {
           console.log(`RUNS ${filePath}....`)
           mocha.run()

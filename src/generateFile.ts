@@ -6,7 +6,7 @@ import { projectConfigs, ProjectConfiguration, Dependency } from './project-conf
 
 // Get the arguments from process.argv (ignoring the first two: 'node' and script name)
 const args = process.argv.slice(2);
-
+const buildProjectArg = args.find(arg => arg.startsWith('--build'));
 // Function to parse --projects argument or --all flag
 function parseProjectsArgument() {
   const allFlag = args.includes('--all');
@@ -141,7 +141,7 @@ const copyTemplateFiles = (src: string, projectName: string, templateDir: string
   // Default files directory within defaultTemplateDir
   const defaultFilesDir = path.join(defaultTemplateDir, src);
   if (fs.existsSync(defaultFilesDir)) {
-      copyRecursiveSync(defaultFilesDir, projectDir);
+    copyRecursiveSync(defaultFilesDir, projectDir);
   }
 };
 
@@ -181,7 +181,7 @@ fs.writeFileSync('./build/projects.json', JSON.stringify(projectConfigs.projects
 
 // Loop over each project in the projectConfigs array
 projectConfigs.projects.forEach((project: ProjectConfiguration) => {
-  if(projects !== 'all' && !projects.includes(project.name)) {
+  if (!projects.includes('all') && !projects.includes(project.name)) {
     return;
   }
   const { name, dependencies, replacements } = project;
@@ -232,7 +232,7 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   // Generate TypeScript import statements
   let tsImports: string = '';
   dependencies.forEach(dep => {
-      tsImports += generateImportStatement(dep);
+    tsImports += generateImportStatement(dep);
   });
 
   // Combine imports and the processed template content
@@ -261,7 +261,8 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);
   // execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
-  // execSync('yarn build', { cwd: projectDir, stdio: 'inherit' });
+  if (buildProjectArg)
+    execSync('./buildProject.bash ' + name, { stdio: 'inherit' });
 
   // Console log for successful project generation
   console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);

@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "generate": "npx ts-node ./src/generateFile.ts",
+    "build:all": "npx ts-node ./src/generateFile.ts --projects=all --build", 
     "install:project": "./installProject.bash",
     "build:project": "./buildProject.bash",
     "serve": "npx http-server --cors -p 3000 ./build"
