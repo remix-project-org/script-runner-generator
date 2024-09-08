@@ -18,7 +18,7 @@ there is one index with a little script that accpets a ?template= and then loads
 In the templates directory you will find a default template which is used for all projects.
 It contains the minimal functionality of the script-runnner.
 
-You do not need to create templates for each project if you are only adding depedencies to it like starknet or zokrates. Just add a project to the config to create it.
+You do not need to create templates for each project if you are only adding depedencies to it like starknet or zokrates. Just add a project to the config with its dependencies to create it.
 
 If you want custom templates you can override any file by putting it in its own template directory, ie
 templates/ethers6/. There you need to add src files. If the generator doesn't find required files it will use those from the default template.
