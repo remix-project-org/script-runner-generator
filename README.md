@@ -20,6 +20,7 @@ If you want custom templates you can override any file by putting it in its own 
 templates/ethers6/. There you need to add src files. If the generator doesn't find required files it will use those from the default template.
 That way you can also override the webpackconfig or tsconfig if needed.
 
+The projects are generated in the projects/ directory, this is not stored in git, they are temporary. It's a complete project ready to be bundles.
 
 ### Remix integration
 
@@ -83,6 +84,17 @@ You can use yarn generate. You need to specify --projects= as an arg.
 Use the flag --build to actually build the projects specified
 ie --projects=all --build 
 or --projects=default --build
+
+## building 
+
+Building means it runs webpack to create a script-runner.js. It's not the generator.
+If you want to experiment with the generated files you can use the build to test your builds and then adapt the template.
+
+run: yarn build:project customproject
+this builds a script-runner.js and puts it in build/projects/customeproject
+
+or you can use the --build flag on the generator
+
 
 ## serving
 
