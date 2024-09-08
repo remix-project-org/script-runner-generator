@@ -23,8 +23,8 @@ const testweb3Provider = {
 }
 
 window.require = (module: string) => {
-    console.log('window.require', module)
-    console.log(scriptReturns, fileContents)
+    //console.log('window.require', module)
+    //console.log(scriptReturns, fileContents)
     if (module === 'web3') {
         return web3Js.default
     }
