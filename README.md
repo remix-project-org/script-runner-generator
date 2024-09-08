@@ -24,7 +24,7 @@ If you want custom templates you can override any file by putting it in its own 
 templates/ethers6/. There you need to add src files. If the generator doesn't find required files it will use those from the default template.
 That way you can also override the webpackconfig or tsconfig if needed.
 
-The projects are generated in the projects/ directory, this is not stored in git, they are temporary. It's a complete project ready to be bundled by webpack.
+The projects are generated in the projects/ directory, they is not stored in git, they are temporary. It's a complete project ready to be bundled by webpack.
 So any edits you do in the projects directory will be gone. You need to do it in the templates or the config if you want them to be permanent.
 
 ### Remix integration
