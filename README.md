@@ -7,7 +7,7 @@
 ### projects 
 
 A project is a custom script runner build that has certain imports added to it, like starknet or sindri. It contains node_modules you specify on top of the 'default' template. You can generate projects by adding them to a configuration file. 
-https://github.com/remix-project-org/script-runner-generator/blob/a74f6b02dc448493517999b6a80d96b0124e1cc9/src/project-configurations.ts
+/src/project-configurations.ts
 
 ### templates
 
