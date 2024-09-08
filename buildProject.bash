@@ -9,3 +9,10 @@ fi
 
 cd src/projects/$projectname || exit
 yarn && yarn build
+# if projects does not exist, create it
+mkdir -p ./../../../build/projects
+# if build/$projectname exists, remove it
+rm -rf ./../../../build/projects/$projectname
+# if build/$projectname does not exist, create it
+mkdir -p ./../../../build/projects/$projectname
+cp -R build/* ./../../../build/projects/$projectname

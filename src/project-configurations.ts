@@ -13,23 +13,28 @@ export interface Dependency {
   
   export interface ProjectConfiguration {
     name: string;
+    publish: boolean;
     description: string;
     dependencies: Dependency[];
-    templateDir: string;
-    defaultTemplateDir: string;
-    tsTemplate: string;
     replacements: Replacements;
   }
   
   export interface ProjectConfigurations {
+    templateDir: string;
+    defaultTemplateDir: string;
+    tsTemplate: string;
     projects: ProjectConfiguration[];
   }
   
   export const projectConfigs: ProjectConfigurations = {
+    templateDir: "./templates/",
+    defaultTemplateDir: "./templates/default",
+    tsTemplate: "src/script-runner.ts",
     projects: [
       {
         name: "default",
         description: "Default project configuration using ethers 5",
+        publish: true,
         dependencies: [
           {
             version: "^5",
@@ -45,20 +50,19 @@ export interface Dependency {
             windowImport: true,
           },
           {
-            version: "^1.5.0",
+            version: "1.5.3",
             name: "web3",
             import: false,
           },
         ],
-        templateDir: "./templates/",
-        defaultTemplateDir: "./templates/default",
-        tsTemplate: "src/script-runner.ts",
+
         replacements: {
         },
       },
       {
         name: "zokrates",
         description: "zokrates template",
+        publish: true,
         dependencies: [
           {
             version: "^5",
@@ -74,7 +78,7 @@ export interface Dependency {
             windowImport: true,
           },
           {
-            version: "^1.5.0",
+            version: "^1.5.3",
             name: "web3",
             import: false,
           },
@@ -85,15 +89,13 @@ export interface Dependency {
             windowImport: true,
           },
         ],
-        templateDir: "./templates/",
-        defaultTemplateDir: "./templates/default",
-        tsTemplate: "src/script-runner.ts",
         replacements: {
         },
       },
       {
         name: "starknet",
         description: "snarknet template",
+        publish: true,
         dependencies: [
           {
             version: "^5",
@@ -109,7 +111,7 @@ export interface Dependency {
             windowImport: true,
           },
           {
-            version: "^1.5.0",
+            version: "^1.5.3",
             name: "web3",
             import: false,
           },
@@ -120,9 +122,6 @@ export interface Dependency {
             windowImport: true,
           },
         ],
-        templateDir: "./templates/",
-        defaultTemplateDir: "./templates/default",
-        tsTemplate: "src/script-runner.ts",
         replacements: {
         },
       },

@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/script-runner.ts', // Update the entry point to your TypeScript file
   target: ['web'],
   output: {
-    filename: './build/script-runner.js',
+    filename: 'script-runner.js',
     path: path.resolve(__dirname, 'build')
   },
   externals: {

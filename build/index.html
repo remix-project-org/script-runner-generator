@@ -12,17 +12,17 @@
 			    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 			}
 
-			// Get the 'build' parameter from the URL
-			var build = getUrlParameter('build');
+			// Get the 'template' parameter from the URL
+			var template = getUrlParameter('template');
 			
-			// Create a script element to load script-runner.js dynamically based on the 'build' parameter
+			// Create a script element to load script-runner.js dynamically based on the 'template' parameter
 			var script = document.createElement('script');
-			if(build) {
-				// If 'build' is present, load the corresponding build-specific script
-				script.src = 'build/' + build + '/script-runner.js'; 
+			if(template) {
+				// If 'template' is present, load the corresponding template-specific script
+				script.src = 'projects/' + template + '/script-runner.js'; 
 			} else {
-				// Default to script-runner.js if no 'build' parameter is present
-				script.src = 'script-runner.js';
+				// Default to script-runner.js if no 'template' parameter is present
+				script.src = 'projects/default/script-runner.js'; 
 			}
 			document.head.appendChild(script);
 		</script>	

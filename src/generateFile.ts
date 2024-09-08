@@ -4,6 +4,49 @@ import { execSync } from 'child_process';
 import * as path from 'path';
 import { projectConfigs, ProjectConfiguration, Dependency } from './project-configurations'; // Import the project configurations
 
+// Get the arguments from process.argv (ignoring the first two: 'node' and script name)
+const args = process.argv.slice(2);
+
+// Function to parse --projects argument or --all flag
+function parseProjectsArgument() {
+  const allFlag = args.includes('--all');
+  const projectsArg = args.find(arg => arg.startsWith('--projects='));
+
+  // If --all is passed, return a placeholder for all projects
+  if (allFlag) {
+    return 'all';
+  }
+
+  // Check if --projects argument exists
+  if (!projectsArg) {
+    console.error('Error: Either --projects, ie --projects=default,starknet or --all argument is required.');
+    process.exit(1);  // Exit the script with an error code
+  }
+
+  // Extract the value of --projects (after the '=' sign)
+  const projectsValue = projectsArg.split('=')[1];
+
+  if (!projectsValue) {
+    console.error('Error: --projects argument is empty.');
+    process.exit(1);  // Exit the script with an error code
+  }
+
+  // Split the value by commas to get an array of project names
+  const projects = projectsValue.split(',');
+
+  return projects;
+}
+
+// Main script logic
+const projects = parseProjectsArgument();
+
+if (projects === 'all') {
+  console.log('All projects selected.');
+} else {
+  console.log('Selected projects:', projects);
+}
+
+
 // Helper function to deep merge objects (like merging package.json contents)
 const deepMerge = (target: any, source: any): any => {
   for (const key in source) {
@@ -129,9 +172,19 @@ const generateImportStatement = (dep: Dependency): string => {
   return importStatement;
 };
 
+const templateDir = projectConfigs.templateDir;
+const defaultTemplateDir = projectConfigs.defaultTemplateDir;
+const tsTemplate = projectConfigs.tsTemplate;
+
+console.log(JSON.stringify(projectConfigs.projects, null, 2));
+fs.writeFileSync('./build/projects.json', JSON.stringify(projectConfigs.projects, null, 2));
+
 // Loop over each project in the projectConfigs array
 projectConfigs.projects.forEach((project: ProjectConfiguration) => {
-  const { name, dependencies, templateDir, defaultTemplateDir, tsTemplate, replacements } = project;
+  if(projects !== 'all' && !projects.includes(project.name)) {
+    return;
+  }
+  const { name, dependencies, replacements } = project;
 
   console.log(`Creating project ${name}...`, dependencies);
 
