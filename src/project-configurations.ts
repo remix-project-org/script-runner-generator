@@ -193,6 +193,40 @@ export const projectConfigs: ProjectConfigurations = {
       },
     },
     {
+      name: "snarkjs",
+      description: "snarkjs template",
+      publish: true,
+      dependencies: [
+        {
+          version: "^5",
+          name: "ethers",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },
+        {
+          version: "^4",
+          name: "multihashes",
+          import: true,
+          windowImport: true,
+        },
+        {
+          version: "^1.5.3",
+          name: "web3",
+          import: false,
+        },
+        {
+          version: "^0.7.0",
+          name: "snarkjs",
+          import: true,
+          windowImport: false,
+          require: true
+        },
+      ],
+      replacements: {
+      },
+    },
+    {
       name: "ethers6",
       description: "ethers6 template",
       publish: true,

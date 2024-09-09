@@ -21,6 +21,7 @@ module.exports = {
       buffer: require.resolve("buffer"),
       fs: false,
       os: false,
+      vm: require.resolve("vm-browserify"),
       crypto: require.resolve("crypto-browserify"),
       constants: require.resolve("constants-browserify"),
       http: require.resolve("stream-http"),
