@@ -58,6 +58,7 @@ project-configurations.ts contains an array of projects
           version: "1.5.3",
           name: "web3",
           import: false,
+          require: true
         },
       ],
 
@@ -71,6 +72,7 @@ project-configurations.ts contains an array of projects
 - import: boolean // adds the import to the script-runner.ts
 - windowImport: boolean // means it will add window['multihashes'] = multihashes;
 - alias, ie: import * as ethersJS from 'ethers';
+- require: uses a require instead of import
 
 replacements are meant to add custom block of code from a file, it will look for 
 \\{MY_BLOCK} in the script-runner.ts
