@@ -47,13 +47,19 @@ jobs:
       - run: for tarfile in ./persist/*.tar; do tar -xf "$tarfile"; done
       - run: 
           name: check files
-          command: find persist
+          command: find build
 
       - browser-tools/install-browser-tools:
           install-firefox: false
           install-chrome: true
           install-chromedriver: false
           install-geckodriver: false
+      - run:
+          name: Test
+          command: |
+            cd test
+            yarn install
+            yarn test_ci
       - store_test_results:
           path: ./test/reports/tests
       - store_artifacts:
