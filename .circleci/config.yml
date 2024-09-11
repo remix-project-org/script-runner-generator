@@ -4,6 +4,7 @@ orbs:
 
 commands:
   build-script-runner:
+    parallelism: 6
     steps:  # This is required to define the steps within the command
       - checkout
       - restore_cache:
@@ -20,7 +21,7 @@ commands:
             - node_modules
       - run:
           name: Build Project
-          command: NODE_OPTIONS="--max-old-space-size=4096" yarn build
+          command: NODE_OPTIONS="--max-old-space-size=4096" bash ./ci/build.sh
 
 jobs:
   test:
