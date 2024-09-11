@@ -2,9 +2,12 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.4
 
-commands:
-  build-script-runner:
+jobs:
+  build-:
     parallelism: 6
+        docker:
+      - image: cimg/node:20.0.0-browsers
+    working_directory: ~/script-runner
     steps:  # This is required to define the steps within the command
       - checkout
       - restore_cache:
@@ -22,8 +25,6 @@ commands:
       - run:
           name: Build Project
           command: NODE_OPTIONS="--max-old-space-size=4096" bash ./ci/build.sh
-
-jobs:
   test:
     parallelism: 10
     docker:
@@ -35,7 +36,6 @@ jobs:
           install-chrome: true
           install-chromedriver: false
           install-geckodriver: false
-      - build-script-runner  # Call the custom command here
       - run:
           name: Test
           command: |
@@ -61,7 +61,7 @@ workflows:
   version: 2
   main_workflow:
     jobs:
-      - test
+      - build
       - deploy:
           requires:
             - test
