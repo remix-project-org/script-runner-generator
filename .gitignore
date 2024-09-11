@@ -2,7 +2,7 @@ node_modules
 build/*
 build/projects
 build/projects/*
-projects/
+src/projects
 
 # But not .wasm or .html files in the build directory
 !build/*.wasm

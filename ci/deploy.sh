@@ -10,5 +10,5 @@ git commit -m "Built website from {$SHA}."
 git push -f origin gh-pages
 ls -la
 git log
-
+git checkout main
 
