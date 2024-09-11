@@ -68,6 +68,7 @@ declare module 'nightwatch' {
     currentSelectedFileIs(name: string): NightwatchBrowser
     switchWorkspace: (workspaceName: string) => NightwatchBrowser
     switchEnvironment: (provider: string) => NightwatchBrowser
+    pinGrid: (provider: string, status: boolean) => NightwatchBrowser
     connectToExternalHttpProvider: (url: string, identifier: string) => NightwatchBrowser
     waitForElementNotContainsText: (id: string, value: string, timeout: number) => NightwatchBrowser
     hideToolTips: (this: NightwatchBrowser) => NightwatchBrowser

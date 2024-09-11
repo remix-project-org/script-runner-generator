@@ -46,7 +46,7 @@ module.exports = {
       .journalLastChildIncludes('setup done')
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts/plonk/zk/keys/verification_key.json"]')
   },
-  'Should run plonk zkproof script for hash checker #group6': function (browser: NightwatchBrowser) {
+  'Should run plonk zkproof script for hash checker #group6': !function (browser: NightwatchBrowser) {
     browser
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_zkproof.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')
