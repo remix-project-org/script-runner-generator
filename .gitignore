@@ -14,3 +14,4 @@ projects/
 # Re-include directories within build, to recurse into them
 !build/*/
 yarn-error.log
+test/src/tests/*_group*.test.ts

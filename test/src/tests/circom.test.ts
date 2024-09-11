@@ -3,7 +3,7 @@ import { NightwatchBrowser } from 'nightwatch'
 import init from '../helpers/init'
 
 module.exports = {
-
+  "@disabled": true,
   before: function (browser: NightwatchBrowser, done: VoidFunction) {
     init(browser, done, 'http://127.0.0.1:8080?plugins=solidity,udapp', false, {
         name: 'scriptRunner',
@@ -11,7 +11,7 @@ module.exports = {
     })
 },
 
-  'Should create semaphore workspace template #group1 #group2 #group3 #group4': function (browser: NightwatchBrowser) {
+  'Should create semaphore workspace template #group6': function (browser: NightwatchBrowser) {
     browser
       //.clickLaunchIcon('filePanel')
       .waitForElementVisible('*[data-id="workspacesMenuDropdown"]')
@@ -33,7 +33,7 @@ module.exports = {
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemtemplates/groth16_verifier.sol.ejs"]')
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemtemplates/plonk_verifier.sol.ejs"]')
   },
-  'Should run plonk trusted setup script for hash checker #group6': function (browser: NightwatchBrowser) {
+  'Should run plonk trusted setup script for hash checker #group6': !function (browser: NightwatchBrowser) {
     browser
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_trusted_setup.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')

@@ -10,7 +10,8 @@
     "serve_remix_live": "npx http-server ./remix-live",
     "serve_script_runner": "npx http-server --cors -p 3000 ../build",
     "test": "./run_tests.sh",
-    "build:e2e": "rm -rf dist && tsc -p tsconfig.json"
+    "build:e2e": "rm -rf dist && node ./buildGroupTests.js && tsc -p tsconfig.json",
+    "select_test": "bash ./select_test.sh"
   },
   "devDependencies": {
     "@types/nightwatch": "^2.3.23",
