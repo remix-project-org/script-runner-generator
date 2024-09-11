@@ -25,23 +25,29 @@ jobs:
       - run:
           name: Build Project
           command: NODE_OPTIONS="--max-old-space-size=4096" bash ./ci/build.sh
+      ## persist the build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./dist/projects
+
   test:
     parallelism: 10
     docker:
       - image: cimg/node:20.0.0-browsers
     working_directory: ~/script-runner
     steps:
+      - checkout
+        - attach_workspace:
+            at: .
+      - run: 
+          name: check files
+          command: find build/projects
       - browser-tools/install-browser-tools:
           install-firefox: false
           install-chrome: true
           install-chromedriver: false
           install-geckodriver: false
-      - run:
-          name: Test
-          command: |
-            cd test
-            yarn install
-            yarn test_ci
       - store_test_results:
           path: ./test/reports/tests
       - store_artifacts:
@@ -62,6 +68,9 @@ workflows:
   main_workflow:
     jobs:
       - build
+      - test:
+          requires:
+            - build
       - deploy:
           requires:
             - build
