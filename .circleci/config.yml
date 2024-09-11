@@ -38,8 +38,8 @@ jobs:
     working_directory: ~/script-runner
     steps:
       - checkout
-        - attach_workspace:
-            at: .
+      - attach_workspace:
+          at: .
       - run: 
           name: check files
           command: find build/projects
