@@ -8,6 +8,7 @@ git config user.name "bunsenstraat"
 git add .
 git commit -m "Built website from {$SHA}."
 git push -f origin gh-pages
-git checkout master
+ls -la
+git log
 
 
