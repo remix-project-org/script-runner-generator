@@ -3,7 +3,7 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.4
 
 jobs:
-  build-:
+  build:
     parallelism: 6
     docker:
       - image: cimg/node:20.0.0-browsers
