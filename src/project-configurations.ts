@@ -160,41 +160,8 @@ export const projectConfigs: ProjectConfigurations = {
       },
     },
     {
-      name: "sindri",
-      description: "sindri template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^4",
-          name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          version: "^0.0.1-alpha.27",
-          name: "sindri",
-          import: true,
-          windowImport: true,
-        },
-      ],
-      replacements: {
-      },
-    },
-    {
-      name: "snarkjs",
-      description: "snarkjs template",
+      name: "zk",
+      description: "snarkjs/circomlib template",
       publish: true,
       dependencies: [
         {
@@ -219,9 +186,63 @@ export const projectConfigs: ProjectConfigurations = {
           version: "^0.7.0",
           name: "snarkjs",
           import: true,
-          windowImport: false,
+          windowImport: true,
           require: true
         },
+        {
+          version: "^0.0.8",
+          name: "circomlibjs",
+          import: true,
+          windowImport: true,
+        },{
+          name: "ffjavascript",
+          version: "^0.2.62",
+          import: true,
+          windowImport: true
+        },{
+          name: "big-integer",
+          version: "^1.6.48",
+          import: false,
+          windowImport: false
+        },{
+          name: "@zk-kit/incremental-merkle-tree",
+          version: "^1.1.0",
+          import: true,
+          windowImport: true,
+          alias: "zkkitIncrementalMerkleTree"
+        },
+        {
+          version: "^0.0.1-alpha.27",
+          name: "sindri",
+          import: true,
+          windowImport: true,
+        },
+        {
+          name: "@semaphore-protocol/data",
+          version: "^3.11.0",
+          import: true,
+          windowImport: true,
+          alias: "semaphoreProtocolData"
+        },{
+          name: "@semaphore-protocol/group",
+          version: "^3.11.0",
+          import: true,
+          windowImport: true,
+          alias: "semaphoreProtocolGroup"
+        },{
+          name: "@semaphore-protocol/identity",
+          version: "^3.11.0",
+          import: true,
+          windowImport: true,
+          alias: "semaphoreProtocolIdentity"
+        }
+        ,{
+          name: "@semaphore-protocol/proof",
+          version: "^3.11.0",
+          import: true,
+          windowImport: true,
+          alias: "semaphoreProtocolProof"
+        }
       ],
       replacements: {
       },
@@ -241,17 +262,6 @@ export const projectConfigs: ProjectConfigurations = {
         {
           version: "^4",
           name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          version: "^5.19.5",
-          name: "starknet",
           import: true,
           windowImport: true,
         },

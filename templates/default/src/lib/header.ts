@@ -1,3 +1,4 @@
+import "@babel/polyfill"
 import { waffleChai } from "@ethereum-waffle/chai";
 import * as path from 'path'
 
