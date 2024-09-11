@@ -42,10 +42,13 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - run: sudo apt update && sudo apt install python3-pip -y zstd
+      - run: for file in ./persist/*.zst; do zstd -d "$file"; done
+      - run: for tarfile in ./persist/*.tar; do tar -xf "$tarfile"; done
       - run: 
           name: check files
           command: find persist
-      - run: sudo apt update && sudo apt install python3-pip -y zstd
+
       - browser-tools/install-browser-tools:
           install-firefox: false
           install-chrome: true
