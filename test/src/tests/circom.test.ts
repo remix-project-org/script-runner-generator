@@ -35,7 +35,6 @@ module.exports = {
   },
   'Should run plonk trusted setup script for hash checker #group6': function (browser: NightwatchBrowser) {
     browser
-       .pause()
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_trusted_setup.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')
       .waitForElementVisible('[data-id="verticalIconsKindcircuit-compiler"]')
