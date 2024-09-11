@@ -9,7 +9,7 @@ npx ganache &
 yarn serve_script_runner &
 yarn serve_remix_live &
 sleep 10
-
+yarn build:e2e
 TESTFILES=$(find ./dist/tests -type f -name '*.js' ! -exec grep -q "'@disabled': \?true" {} \; -print | sort | circleci tests split --split-by=timings)
 for TESTFILE in $TESTFILES; do
     yarn nightwatch --test $TESTFILE --config dist/nightwatch.js  || TEST_EXITCODE=1
