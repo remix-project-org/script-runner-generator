@@ -1,4 +1,7 @@
 #!/bin/bash
 
 set -e
-npx ts-node src/getProjects.ts | sort | circleci tests split
+BUILDS=$(npx ts-node src/getProjects.ts | sort | circleci tests split)
+for BUILD in $BUILDS; do
+    yarn generate --projects=$BUILD --build
+done
