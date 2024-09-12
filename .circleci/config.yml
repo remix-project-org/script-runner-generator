@@ -1,6 +1,21 @@
 version: 2.1
-orbs:
-  browser-tools: circleci/browser-tools@1.4.4
 
+jobs:
+  your_job_name:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: "Your build steps"
+          command: echo "Running build"
 
-
+workflows:
+  version: 2
+  your_workflow_name:
+    jobs:
+      - your_job_name:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
