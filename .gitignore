@@ -15,3 +15,5 @@ src/projects
 !build/*/
 yarn-error.log
 test/src/tests/*_group*.test.ts
+
+persist

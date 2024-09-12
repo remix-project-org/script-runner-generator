@@ -79,6 +79,7 @@ jobs:
       - checkout
       - run: git checkout gh-pages
       - run: git checkout main -- ci/deploy.sh
+      - run: git checkout main -- .gitignore
       - attach_workspace:
           at: .
       - run: sudo apt update && sudo apt install python3-pip -y zstd
