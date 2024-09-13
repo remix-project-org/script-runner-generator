@@ -1,9 +1,24 @@
 import Web3 from 'web3'
+
+interface RequestArguments {
+    readonly method: string;
+    readonly params?: readonly unknown[] | object;
+}
+
+interface ProviderRpcError extends Error {
+    message: string;
+    code: number;
+    data?: unknown;
+}
+
 window.web3Provider = {
-    sendAsync(payload: any, callback: any) {
+    sendAsync(payload: RequestArguments, callback: (error: ProviderRpcError | null, result?: any) => void) {
         window.remix.call('web3Provider', 'sendAsync', payload)
             .then((result: any) => callback(null, result))
             .catch((e: any) => callback(e))
+    },
+    request(args: RequestArguments): Promise<unknown> {
+        return window.remix.call('web3Provider', 'sendAsync', args)
     }
 }
 // ts-ignore
