@@ -124,6 +124,13 @@ const performReplacements = (
 
 // Function to copy only files from the `files` subdirectory of the template directories
 const copyTemplateFiles = (src: string, projectName: string, templateDir: string | undefined, defaultTemplateDir: string, projectDir: string) => {
+  
+  // Default files directory within defaultTemplateDir
+  const defaultFilesDir = path.join(defaultTemplateDir, src);
+  if (fs.existsSync(defaultFilesDir)) {
+    copyRecursiveSync(defaultFilesDir, projectDir);
+  }
+  
   // Project-specific files directory
   if (templateDir) {
     const projectSpecificFilesDir = path.join(templateDir, projectName, src);
@@ -136,13 +143,7 @@ const copyTemplateFiles = (src: string, projectName: string, templateDir: string
     if (fs.existsSync(genericFilesDir)) {
       copyRecursiveSync(genericFilesDir, projectDir);
     }
-  }
-
-  // Default files directory within defaultTemplateDir
-  const defaultFilesDir = path.join(defaultTemplateDir, src);
-  if (fs.existsSync(defaultFilesDir)) {
-    copyRecursiveSync(defaultFilesDir, projectDir);
-  }
+  }  
 };
 
 // Function to determine if a dependency should be imported, required, or added to window object
