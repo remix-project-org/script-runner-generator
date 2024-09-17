@@ -18,7 +18,13 @@ window.web3Provider = {
             .catch((e: any) => callback(e))
     },
     request(args: RequestArguments): Promise<unknown> {
-        return window.remix.call('web3Provider', 'sendAsync', args)
+        return new Promise<unknown>((resolve, reject) => {
+            window.remix.call('web3Provider', 'sendAsync', args)
+            .then((response: any) => {
+                resolve(response.result)
+            })
+            .catch((e: any) => reject(e))
+        })
     }
 }
 // ts-ignore
