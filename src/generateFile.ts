@@ -279,7 +279,12 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
 
   // Generate TypeScript import statements
   let tsImports: string = '';
-  [...dependencies, ...cliDependencies].forEach(dep => {
+  [...dependencies].forEach(dep => {
+    tsImports += generateImportStatement(dep);
+  });
+
+  [...cliDependencies].forEach(dep => {
+    dep.windowImport = true;
     tsImports += generateImportStatement(dep);
   });
 
