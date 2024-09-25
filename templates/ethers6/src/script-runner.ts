@@ -1,0 +1,6 @@
+import './lib/header'
+import './lib/matomo'
+import './lib/codeExecutor'
+import './lib/web3provider'
+//import './lib/hardhat'
+import './lib/console'
