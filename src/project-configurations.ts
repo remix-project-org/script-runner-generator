@@ -188,10 +188,10 @@ export const projectConfigs: ProjectConfigurations = {
           import: false,
         },
         {
-          version: "^0.7.0",
+          version: "0.7.0",
           name: "snarkjs",
           import: true,
-          windowImport: true,
+          windowImport: false,
           require: true
         },
         {
@@ -217,7 +217,7 @@ export const projectConfigs: ProjectConfigurations = {
           alias: "zkkitIncrementalMerkleTree"
         },
         {
-          version: "^0.0.1-alpha.27",
+          version: "0.0.1-alpha.27",
           name: "sindri",
           import: true,
           windowImport: true,

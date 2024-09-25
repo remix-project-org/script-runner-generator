@@ -22,6 +22,7 @@ const snarkJs = Object.assign({}, snarkjs, {
 
 window['snarkjs'] = snarkJs
 
+
 const createCircuit = sindri.default.createCircuit
 const proveCircuit = sindri.default.proveCircuit
 

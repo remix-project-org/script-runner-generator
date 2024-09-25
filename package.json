@@ -12,7 +12,14 @@
     "select_test": "cd test && bash ./select_test.sh"
   },
   "dependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-es2015": "latest",
+    "@babel/preset-es2017": "latest",
+    "@babel/preset-stage-0": "^7.0.0",
+    "@babel/register": "^7.4.4",
     "@ethereum-waffle/chai": "^3.4.4",
     "@remixproject/plugin": "^0.3.42",
     "@remixproject/plugin-iframe": "^0.3.42",

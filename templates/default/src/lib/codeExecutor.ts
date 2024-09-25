@@ -5,7 +5,7 @@ import * as path from 'path'
 import './runWithMocha'
 import * as web3Js from 'web3'
 
-const scriptReturns:  { [key: string]: any } = {} // keep track of modules exported values
+const scriptReturns: { [key: string]: any } = {} // keep track of modules exported values
 const fileContents: { [key: string]: any } = {} // keep track of file content
 declare global {
   interface Window {
@@ -15,24 +15,24 @@ declare global {
 }
 
 const testweb3Provider = {
-    sendAsync(payload: any, callback: any) {
-        window.remix.call('web3Provider', 'sendAsync', payload)
-            .then((result: any) => callback(null, result))
-            .catch((e: any) => callback(e))
-    }
+  sendAsync(payload: any, callback: any) {
+    window.remix.call('web3Provider', 'sendAsync', payload)
+      .then((result: any) => callback(null, result))
+      .catch((e: any) => callback(e))
+  }
 }
 
 window.require = (module: string) => {
-    //console.log('window.require', module)
-    //console.log(scriptReturns, fileContents)
-    if (module === 'web3') {
-        return web3Js.default
-    }
-    if (window[module]) return window[module] // library
-    if (window['_' + module]) return window['_' + module] // library
-    else if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) return JSON.parse(fileContents[window.__execPath__][module])
-    else if (window.__execPath__ && scriptReturns[window.__execPath__]) return scriptReturns[window.__execPath__][module] // module exported values
-    else throw new Error(`${module} module require is not supported by Remix IDE`)
+  //console.log('window.require', module)
+  //console.log(scriptReturns, fileContents)
+  if (module === 'web3') {
+    return web3Js.default
+  }
+  if (window[module]) return window[module] // library
+  if (window['_' + module]) return window['_' + module] // library
+  else if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) return JSON.parse(fileContents[window.__execPath__][module])
+  else if (window.__execPath__ && scriptReturns[window.__execPath__]) return scriptReturns[window.__execPath__][module] // module exported values
+  else throw new Error(`${module} module require is not supported by Remix IDE`)
 }
 
 class CodeExecutor extends PluginClient {
@@ -74,11 +74,19 @@ class CodeExecutor extends PluginClient {
         }
 
         // execute the script
-        script = `const exports = {};
-                  const module = { exports: {} }
-                  window.__execPath__ = "${fromPath}"
-                  ${script};
-                  return exports || module.exports`
+
+        script = `
+        try {
+            const exports = {};
+            const module = { exports: {} }
+            window.__execPath__ = "${fromPath}"
+            ${script};
+            return exports || module.exports;
+        } catch (err) {
+            // Include the script location and throw it upwards
+            throw new Error('Error in script from path "${fromPath}": ' + err.message + '\\n' + err.stack);
+        }
+    `;
         //console.log('script', script, scriptReturns, fileContents)
         const returns = (new Function(script))()
         //console.log('returns', returns, scriptReturns, fileContents)
@@ -88,6 +96,11 @@ class CodeExecutor extends PluginClient {
         }
         return returns
       } catch (e: any) {
+
+        // Handle the error and log with detailed trace
+        console.error('An error occurred while running the script:', e);
+        console.error('Script source:', script);  // Show the original script for context
+
         console.error('error', {
           data: [e.message]
         })
