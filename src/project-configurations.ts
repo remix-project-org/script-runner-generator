@@ -11,6 +11,11 @@ export interface Replacements {
   [key: string]: string;
 }
 
+export interface customScriptRunnerConfig {
+  baseConfiguration: string;
+  dependencies: Dependency[];
+}
+
 export interface ProjectConfiguration {
   name: string;
   publish: boolean;
