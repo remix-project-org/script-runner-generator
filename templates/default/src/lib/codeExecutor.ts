@@ -23,17 +23,58 @@ const testweb3Provider = {
 }
 
 window.require = (module: string) => {
-  //console.log('window.require', module)
-  //console.log(scriptReturns, fileContents)
+  console.log('window.require', module)
+  // console.log(scriptReturns, fileContents)
+
+  // Handle web3 case
   if (module === 'web3') {
-    return web3Js.default
+    return web3Js.default;
   }
-  if (window[module]) return window[module] // library
-  if (window['_' + module]) return window['_' + module] // library
-  else if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) return JSON.parse(fileContents[window.__execPath__][module])
-  else if (window.__execPath__ && scriptReturns[window.__execPath__]) return scriptReturns[window.__execPath__][module] // module exported values
-  else throw new Error(`${module} module require is not supported by Remix IDE`)
-}
+
+  // Handle submodules dynamically
+  if (module.includes('/')) {
+    const [baseModule, ...submodules] = module.split('/');
+    
+    if (!window[baseModule]) {
+      console.log(`${baseModule} is not loaded on the window`)
+      window.remix.emit('dependencyError', { data: [`${baseModule} is not available as a dependency`] })
+      throw new Error(`${baseModule} is not available as a dependency`);
+    }
+
+    // Traverse through the submodules and return the correct module
+    let currentModule = window[baseModule];
+    for (const submodule of submodules) {
+      if (currentModule[submodule]) {
+        currentModule = currentModule[submodule];
+      } else {
+        window.remix.emit('dependencyError', { data: [`${module} is not available as a submodule. Available submodules are: ${Object.keys(currentModule).join(', ')}`] })
+        throw new Error(`${module} is not available as a submodule. Available submodules are: ${Object.keys(currentModule).join(', ')}`);
+      }
+    }
+    return currentModule;
+  }
+
+  // Standard cases for libraries directly on window
+  if (window[module]) return window[module]; // library
+  if (window['_' + module]) return window['_' + module]; // library
+  
+  // Handle JSON or ABI files
+  else if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) {
+    return JSON.parse(fileContents[window.__execPath__][module]);
+  }
+  
+  // Handle other script-returned modules
+  else if (window.__execPath__ && scriptReturns[window.__execPath__]) {
+    return scriptReturns[window.__execPath__][module]; // module exported values
+  }
+
+  // Module not found
+  
+  else {
+    window.remix.emit('dependencyError', { data: [`${module} module require is not supported by Remix IDE`] })
+    throw new Error(`${module} module require is not supported by Remix IDE`);
+  }
+};
 
 class CodeExecutor extends PluginClient {
   async execute(script: string, filePath: string) {
@@ -88,7 +129,7 @@ class CodeExecutor extends PluginClient {
         }
     `;
         //console.log('script', script, scriptReturns, fileContents)
-        const returns = (new Function(script))()
+        const returns = await (new Function(script))();
         //console.log('returns', returns, scriptReturns, fileContents)
         if (mocha.suite && ((mocha.suite.suites && mocha.suite.suites.length) || (mocha.suite.tests && mocha.suite.tests.length))) {
           console.log(`RUNS ${filePath}....`)

@@ -3,7 +3,12 @@ import * as fs from 'fs';
 import { execSync } from 'child_process';
 import * as path from 'path';
 import { projectConfigs, ProjectConfiguration, Dependency } from './project-configurations'; // Import the project configurations
+import { exit } from 'process';
 
+interface ExecSyncError extends Error {
+  stderr: Buffer;
+  stdout: Buffer;
+}
 // Get the arguments from process.argv (ignoring the first two: 'node' and script name)
 const args = process.argv.slice(2);
 const buildProjectArg = args.find(arg => arg.startsWith('--build'));
@@ -74,19 +79,19 @@ const customName = parseCustomNameArgument();
 
 if (projects === 'all') {
   console.log('All projects selected.');
-  if(copyTemplate) {
+  if (copyTemplate) {
     // return error if --copy flag is used with --all flag
     console.error('Error: --copy flag cannot be used without specifying a project.');
     process.exit(1);  // Exit the script with an error code
   }
 } else {
   console.log('Selected projects:', projects);
-  if(projects.length > 1 && (customName || copyTemplate)) {
+  if (projects.length > 1 && (customName || copyTemplate)) {
     // return error if --name flag is used with multiple projects
     console.error('Error: --name flag cannot be used with multiple projects.');
     process.exit(1);  // Exit the script with an error code
   }
-  if(projects.length === 1 && !customName && copyTemplate) {
+  if (projects.length === 1 && !customName && copyTemplate) {
     // return error if no --name flag is used with single project
     console.error('Error: --name flag is required for single project.');
     process.exit(1);  // Exit the script with an error code
@@ -225,7 +230,7 @@ const defaultTemplateDir = projectConfigs.defaultTemplateDir;
 const tsTemplate = projectConfigs.tsTemplate;
 
 console.log(JSON.stringify(projectConfigs.projects, null, 2));
-fs.writeFileSync('./build/projects.json', JSON.stringify(projectConfigs.projects, null, 2));
+
 
 // Loop over each project in the projectConfigs array
 projectConfigs.projects.forEach((project: ProjectConfiguration) => {
@@ -314,8 +319,31 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);
   // execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
-  if (buildProjectArg)
-    execSync(`./buildProject.bash ${customName? customName:name}`, { stdio: 'inherit' });
+  if (buildProjectArg) {
+    try {
+      // Execute the bash script
+      const out = execSync(`./buildProject.bash ${customName ? customName : name}`, { stdio: 'pipe' });
+      
+      // Convert the output buffer to a string and log it
+      console.log(out.toString());
+    } catch (error) {
+      if (error instanceof Error) {
+        const execError = error as ExecSyncError;
+        const errString = execError.stderr.toString()
+        // split the error string by new line
+        const errors = errString.split('\n')
+        // log each error
+        errors.forEach(err => {
+          // only show error lines
+          if (err.includes('error')) console.error(err);
+        });
+        //console.error(execError.stderr.toString());
+        exit(1)
+      } else {
+        //console.error('Unknown error', error);
+      }
+    }
+  }
 
   // Console log for successful project generation
   console.log(`Project ${name} has been created in ${projectDir} and dependencies installed.`);

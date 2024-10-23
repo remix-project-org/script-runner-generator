@@ -53,7 +53,7 @@ app.post('/build', (req: Request, res: Response) => {
   const buildExists = fs.existsSync(`./build/projects/${hash}/script-runner.js`);
 
   if (buildExists) {
-    return res.json({ message: 'Build already exists', hash });
+    //return res.json({ message: 'Build already exists', hash });
   }
 
   const command = `NODE_ENV=development yarn generate --projects=${configuation.baseConfiguration} --build --copy --name=${hash} --dependencies=${dependencies}`;
@@ -63,8 +63,20 @@ app.post('/build', (req: Request, res: Response) => {
   // Execute yarn command
   exec(command, (error, stdout, stderr) => {
     if (error) {
-      console.error(`Error executing yarn build: ${error}`);
-      return res.status(500).json({ error: `Error executing yarn build: ${error.message}` });
+
+      const errString = stderr.toString()
+      // split the error string by new line
+      const errors = errString.split('\n')
+      // log each error
+      const errorLines: string[] = []
+      errors.forEach(err => {
+        // only show error lines
+        if (err.includes('error')) {
+          errorLines.push(err)
+        }
+      });
+      //console.error(`STDERR:`, stderr);
+      return res.status(500).json({ error: errorLines });
     }
 
     console.log(`stdout: ${stdout}`);

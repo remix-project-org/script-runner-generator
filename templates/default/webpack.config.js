@@ -4,6 +4,10 @@ const webpack = require('webpack');
 module.exports = {
   entry: './src/script-runner.ts', // Update the entry point to your TypeScript file
   target: ['web'],
+  stats: {
+    warnings: false,  // This suppresses all warnings
+  },
+
   output: {
     filename: 'script-runner.js',
     path: path.resolve(__dirname, 'build')
