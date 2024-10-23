@@ -73,148 +73,6 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true,
         },
-      ],
-
-      replacements: {
-      },
-    },
-    {
-      name: "zksync",
-      title: "ZkSync",
-      description: "ZkSync ethers template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-
-        {
-          version: "1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          name: "zksync-ethers",
-          version: "^5.7.2",
-          import: true,
-          windowImport: true,
-        }
-      ],
-
-      replacements: {
-      },
-    },
-    {
-      name: "zksyncv6",
-      title: "ZkSync v6",
-      description: "ZkSync v6 with Ethers 6 template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^6",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-
-        {
-          version: "1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          name: "zksync-ethers",
-          version: "^6",
-          import: true,
-          windowImport: true,
-        }
-      ],
-
-      replacements: {
-      },
-    },
-    {
-      name: "zokrates",
-      title: "Zokrates",
-      description: "zokrates template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          version: "^1.1.3",
-          name: "zokrates-js",
-          import: true,
-          windowImport: true,
-        },
-      ],
-      replacements: {
-      },
-    },
-    {
-      name: "starknet",
-      title: "Starknet",
-      description: "snarknet template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          version: "^5.19.5",
-          name: "starknet",
-          import: true,
-          windowImport: true,
-        },
-      ],
-      replacements: {
-      },
-    },
-    {
-      name: "zk",
-      title: "zero knowledge",
-      description: "snarkjs/circomlib template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
         {
           version: "0.7.0",
           name: "snarkjs",
@@ -277,6 +135,37 @@ export const projectConfigs: ProjectConfigurations = {
           alias: "semaphoreProtocolProof"
         }
       ],
+
+      replacements: {
+      },
+    },
+    {
+      name: "zksyncv6",
+      title: "ZkSync v6",
+      description: "ZkSync v6 with Ethers 6 template",
+      publish: true,
+      dependencies: [
+        {
+          version: "^6",
+          name: "ethers",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },
+
+        {
+          version: "1.5.3",
+          name: "web3",
+          import: false,
+        },
+        {
+          name: "zksync-ethers",
+          version: "^6",
+          import: true,
+          windowImport: true,
+        }
+      ],
+
       replacements: {
       },
     },
