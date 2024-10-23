@@ -31,10 +31,24 @@ window.require = (module: string) => {
     return web3Js.default;
   }
 
+  // Standard cases for libraries directly on window
+  if (window[module]) return window[module]; // library
+  if (window['_' + module]) return window['_' + module]; // library
+
+  // Handle JSON or ABI files
+  if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) {
+    return JSON.parse(fileContents[window.__execPath__][module]);
+  }
+
+  // Handle other script-returned modules
+  else if (window.__execPath__ && scriptReturns[window.__execPath__]) {
+    return scriptReturns[window.__execPath__][module]; // module exported values
+  }
+
   // Handle submodules dynamically
-  if (module.includes('/')) {
+  else if (module.includes('/')) {
     const [baseModule, ...submodules] = module.split('/');
-    
+
     if (!window[baseModule]) {
       console.log(`${baseModule} is not loaded on the window`)
       window.remix.emit('dependencyError', { data: [`${baseModule} is not available as a dependency`] })
@@ -53,23 +67,8 @@ window.require = (module: string) => {
     }
     return currentModule;
   }
-
-  // Standard cases for libraries directly on window
-  if (window[module]) return window[module]; // library
-  if (window['_' + module]) return window['_' + module]; // library
-  
-  // Handle JSON or ABI files
-  else if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) {
-    return JSON.parse(fileContents[window.__execPath__][module]);
-  }
-  
-  // Handle other script-returned modules
-  else if (window.__execPath__ && scriptReturns[window.__execPath__]) {
-    return scriptReturns[window.__execPath__][module]; // module exported values
-  }
-
   // Module not found
-  
+
   else {
     window.remix.emit('dependencyError', { data: [`${module} module require is not supported by Remix IDE`] })
     throw new Error(`${module} module require is not supported by Remix IDE`);
