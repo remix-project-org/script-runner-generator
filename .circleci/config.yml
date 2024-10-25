@@ -77,6 +77,8 @@ jobs:
     working_directory: ~/script-runner
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run: sudo apt update && sudo apt install python3-pip -y zstd
       - run: for file in ./persist/*.zst; do zstd -d "$file"; done
       - run: for tarfile in ./persist/*.tar; do tar -xf "$tarfile"; done
@@ -84,8 +86,7 @@ jobs:
       - run: git checkout gh-pages
       - run: git checkout main -- ci/deploy.sh
       - run: git checkout main -- .gitignore
-      - attach_workspace:
-          at: .
+
       - run: sudo apt update && sudo apt install python3-pip -y zstd
       - run: for file in ./persist/*.zst; do zstd -d "$file"; done
       - run: for tarfile in ./persist/*.tar; do tar -xf "$tarfile"; done
