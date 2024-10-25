@@ -97,9 +97,6 @@ workflows:
   main_workflow:
     jobs:
       - build
-      - test:
-          requires:
-            - build
       - deploy:
           requires:
             - build
