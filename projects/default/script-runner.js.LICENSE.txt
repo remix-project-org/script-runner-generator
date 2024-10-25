@@ -1,4 +1,13 @@
 /*
+ * [js-sha512]{@link https://github.com/emn178/js-sha512}
+ *
+ * @version 0.8.0
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2018
+ * @license MIT
+ */
+
+/*
 object-assign
 (c) Sindre Sorhus
 @license MIT
@@ -592,9 +601,75 @@ PERFORMANCE OF THIS SOFTWARE.
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
+/*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
+
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+/*! scure-base - MIT License (c) 2022 Paul Miller (paulmillr.com) */
+
+/**
+ * @file Embedded JavaScript templating engine. {@link http://ejs.co}
+ * @author Matthew Eernisse <mde@fleegix.org>
+ * @author Tiancheng "Timothy" Gu <timothygu99@gmail.com>
+ * @project EJS
+ * @license {@link http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0}
+ */
+
+/**
+ * @module @semaphore-protocol/data
+ * @version 3.15.2
+ * @file A library to query Semaphore contracts.
+ * @copyright Ethereum Foundation 2022
+ * @license MIT
+ * @see [Github]{@link https://github.com/semaphore-protocol/semaphore/tree/main/packages/data}
+*/
+
+/**
+ * @module @semaphore-protocol/group
+ * @version 3.15.2
+ * @file A library to create and manage Semaphore groups.
+ * @copyright Ethereum Foundation 2022
+ * @license MIT
+ * @see [Github]{@link https://github.com/semaphore-protocol/semaphore/tree/main/packages/group}
+*/
+
+/**
+ * @module @semaphore-protocol/identity
+ * @version 3.15.2
+ * @file A library to create Semaphore identities.
+ * @copyright Ethereum Foundation 2022
+ * @license MIT
+ * @see [Github]{@link https://github.com/semaphore-protocol/semaphore/tree/main/packages/identity}
+*/
+
+/**
+ * @module @semaphore-protocol/proof
+ * @version 3.15.2
+ * @file A library to generate and verify Semaphore proofs.
+ * @copyright Ethereum Foundation 2022
+ * @license MIT
+ * @see [Github]{@link https://github.com/semaphore-protocol/semaphore/tree/main/packages/proof}
+*/
+
+/**
+ * @module @zk-kit/groth16
+ * @version 0.3.0
+ * @file A snippet of SnarkJS code for verifying and generating Groth16 proofs only.
+ * @copyright Ethereum Foundation 2023
+ * @license GPL-3.0
+ * @see [Github]{@link https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/groth16}
+*/
+
+/**
+ * @module @zk-kit/incremental-merkle-tree
+ * @version 1.1.0
+ * @file Incremental Merkle tree implementation in TypeScript.
+ * @copyright Cedoor 2023
+ * @license MIT
+ * @see [Github]{@link https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/incremental-merkle-tree}
+*/
 
 /**
  * [js-sha3]{@link https://github.com/emn178/js-sha3}
