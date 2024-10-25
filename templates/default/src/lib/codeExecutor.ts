@@ -23,8 +23,6 @@ const testweb3Provider = {
 }
 
 window.require = (module: string) => {
-  console.log('window.require', module)
-  // console.log(scriptReturns, fileContents)
 
   // Handle web3 case
   if (module === 'web3') {
@@ -94,7 +92,6 @@ class CodeExecutor extends PluginClient {
           }
         });
         script = transpiled.outputText;
-        //console.log('transpiled', transpiled.outputText)
         // extract all the "require", execute them and store the returned values.
         const regexp = /require\((.*?)\)/g
         const array = [...script.matchAll(regexp)];
@@ -127,9 +124,9 @@ class CodeExecutor extends PluginClient {
             throw new Error('Error in script from path "${fromPath}": ' + err.message + '\\n' + err.stack);
         }
     `;
-        //console.log('script', script, scriptReturns, fileContents)
+
         const returns = await (new Function(script))();
-        //console.log('returns', returns, scriptReturns, fileContents)
+
         if (mocha.suite && ((mocha.suite.suites && mocha.suite.suites.length) || (mocha.suite.tests && mocha.suite.tests.length))) {
           console.log(`RUNS ${filePath}....`)
           mocha.run()

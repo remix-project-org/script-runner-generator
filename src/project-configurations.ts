@@ -182,6 +182,11 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true,
         },
+        {
+          version: "1.5.3",
+          name: "web3",
+          import: false,
+        }
 
       ],
       replacements: {

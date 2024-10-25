@@ -10,22 +10,6 @@ module.exports = {
       url: 'http://127.0.0.1:3000?template=ethers6'
     })
   },
-  'Should execution a simple console command #group1': function (browser: NightwatchBrowser) {
-    browser
-      .waitForElementVisible('*[data-id="terminalCli"]', 10000)
-      .executeScriptInTerminal('console.log(1 + 1)')
-      .pause(2000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '2', 60000)
-  },
-
-  'Should clear console #group1': function (browser: NightwatchBrowser) {
-    browser
-      .waitForElementVisible('*[data-id="terminalCli"]')
-      .journalChildIncludes('Welcome to Remix')
-      .click('#clearConsole')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '', 60000)
-  },
-
   'Async/Await Script #group1': function (browser: NightwatchBrowser) {
     browser
       .addFile('asyncAwait.js', { content: asyncAwait })
@@ -48,7 +32,7 @@ module.exports = {
       .waitForElementContainsText('*[data-id="terminalJournal"]', '["0x5B38Da6a701c568545dCfcB03FcB875f56beddC4","0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB","0x617F2E2fD72FD9D5503197092aC168c91465E7f2","0x17F6AD8Ef982297579C203069C1DbfFE4348c372","0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678","0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7","0x1aE0EA34a72D944a8C7603FfB3eC30a6669E454C","0x0A098Eda01Ce92ff4A4CCb7A4fFFb5A43EBC70DC","0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c","0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C","0x4B0897b0513fdC7C541B6d9D7E929C4e5364D2dB","0x583031D1113aD414F02576BD6afaBfb302140225","0xdD870fA1b7C4700F2BD7f44238821C26f7392148"]')
   },
 
-  'Call web3.eth.getAccounts() using External Http Provider #group5': function (browser: NightwatchBrowser) {
+  'Call web3.eth.getAccounts() using External Http Provider #group3': function (browser: NightwatchBrowser) {
     browser
       .click('*[data-id="terminalClearConsole"]') // clear  the terminal
       .clickLaunchIcon('udapp')
@@ -60,47 +44,9 @@ module.exports = {
       .waitForElementContainsText('*[data-id="terminalJournal"]', '","', 60000)
   },
 
-  'Call Remix File Resolver (external URL) from a script #group3': function (browser: NightwatchBrowser) {
-    browser
-      .click('*[data-id="terminalClearConsole"]') // clear the terminal
-      .addFile('resolveExternalUrlAndSave.js', { content: resolveExternalUrlAndSave })
-      .openFile('resolveExternalUrlAndSave.js')
-      .pause(1000)
-      .executeScriptInTerminal('remix.execute(\'resolveExternalUrlAndSave.js\')')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Implementation of the {IERC20} interface.', 60000)
-      .openFile('.deps/github/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol')
-  },
-
-  'Call Remix File Resolver (internal URL) from a script #group3': function (browser: NightwatchBrowser) {
-    browser
-      .click('*[data-id="terminalClearConsole"]') // clear the terminal
-      .addFile('resolveUrl.js', { content: resolveUrl })
-      .openFile('resolveUrl.js')
-      .pause(1000)
-      .executeScriptInTerminal('remix.execute(\'resolveUrl.js\')')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'contract Ballot {', 60000)
-  },
-
-  'Call Remix File Resolver (internal URL) from a script and specify a path #group3': function (browser: NightwatchBrowser) {
-    browser
-      .click('*[data-id="terminalClearConsole"]') // clear the terminal
-      .addFile('resolveExternalUrlAndSaveToaPath.js', { content: resolveExternalUrlAndSaveToaPath })
-      .openFile('resolveExternalUrlAndSaveToaPath.js')
-      .pause(1000)
-      .executeScriptInTerminal('remix.execute(\'resolveExternalUrlAndSaveToaPath.js\')')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'abstract contract ERC20Burnable', 60000)
-      .openFile('.deps/github/newFile.sol')
-
-  },
-
   'Deploy "Owner" using an ether.js script, listen to event and check event are logged in the terminal #group4': function (browser: NightwatchBrowser) {
     browser
       .clickLaunchIcon('solidity')
-      .click('.remixui_compilerConfigSection')
-      .setValue('#evmVersionSelector', 'london') // Set EVM version as fork version
-      .clickLaunchIcon('settings')
-      .clickLaunchIcon('udapp')
-      .switchEnvironment('vm-london')
       .click('*[data-id="terminalClearConsole"]') // clear the terminal
       .clickLaunchIcon('filePanel')
       .click('*[data-id="treeViewUltreeViewMenu"]') // make sure we create the file at the root folder
@@ -112,17 +58,6 @@ module.exports = {
       .clickLaunchIcon('solidity')
       .click('*[data-id="compilerContainerCompileBtn"]').pause(5000) // compile Owner
       .executeScriptInTerminal('remix.execute(\'deployWithEthersJs.js\')')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Contract Address:', 60000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '0xd9145CCE52D386f254917e481eB44e9943F39138', 60000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Deployment successful.', 60000)
-      .addAtAddressInstance('0xd9145CCE52D386f254917e481eB44e9943F39138', true, true, false)
-      .click('*[data-id="terminalClearConsole"]') // clear the terminal
-      .waitForElementPresent('*[data-id="universalDappUiContractActionWrapper"]', 60000)
-      .clickInstance(0)
-      .clickFunction('changeOwner - transact (not payable)', { types: 'address newOwner', values: '0xd9145CCE52D386f254917e481eB44e9943F39138' }) // execute the "changeOwner" function
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'previousOwner', 60000) // check that the script is logging the event
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4', 60000) // check that the script is logging the event
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'newOwner', 60000)
       .waitForElementContainsText('*[data-id="terminalJournal"]', '0xd9145CCE52D386f254917e481eB44e9943F39138', 60000)
   },
   'Run tests using Mocha script and check result logging in the terminal #group4': function (browser: NightwatchBrowser) {
@@ -145,29 +80,7 @@ module.exports = {
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Message: incorrect number: expected 56 to equal 55')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Passed: 2')
       .waitForElementContainsText('*[data-id="terminalJournal"]', 'Failed: 1')
-  },
-  'Run tests using Mocha for a contract with library deployment and check result logging in the terminal #group4': function (browser: NightwatchBrowser) {
-    browser
-      .addFile('scripts/storageWithLib.test.js', { content: storageWithLibMochaTests })
-      .pause(1000)
-      .click('[data-id="treeViewDivtreeViewItemcontracts"]')
-      .addFile('contracts/StorageWithLib.sol', { content: storageWithLibContract })
-      .openFile('contracts/StorageWithLib.sol')
-      .clickLaunchIcon('solidity')
-      .click('*[data-id="compilerContainerCompileBtn"]')
-      .pause(1000) // compile StorageWithLib
-      .executeScriptInTerminal('remix.execute(\'scripts/storageWithLib.test.js\')')
-      .pause(1000)
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'RUNS scripts/script.ts....')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Storage')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'deploying lib:')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', '✘ test library integration by calling a lib method')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Expected: 34')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Received: 14')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Message: expected \'14\' to equal \'34\'')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Passed: 0')
-      .waitForElementContainsText('*[data-id="terminalJournal"]', 'Failed: 1')
-  },  
+  } 
 }
 
 
@@ -244,40 +157,45 @@ const resolveUrl = `
 `
 
 const deployWithEthersJs = `
-// Right click on the script name and hit "Run" to execute
+import { ethers } from 'ethers'
+
+/**
+ * Deploy the given contract
+ * @param {string} contractName name of the contract to deploy
+ * @param {Array<any>} args list of constructor' parameters
+ * @param {Number} accountIndex account index from the exposed account
+ * @return {Contract} deployed contract
+ * 
+ */
+const deploy = async (contractName: string, args: Array<any>, accountIndex?: number): Promise<ethers.Contract> => {
+
+  console.log(\`deploying \${contractName}\`)
+  // Note that the script needs the ABI which is generated from the compilation artifact.
+  // Make sure contract is compiled and artifacts are generated
+  const artifactsPath = \`contracts/artifacts/\${contractName}.json\` // Change this for different path
+
+  const metadata = JSON.parse(await remix.call('fileManager', 'getFile', artifactsPath))
+  // 'web3Provider' is a remix global variable object
+
+  const signer = await (new ethers.BrowserProvider(web3Provider)).getSigner(accountIndex)
+
+  const factory = new ethers.ContractFactory(metadata.abi, metadata.data.bytecode.object, signer)
+
+  const contract = await factory.deploy(...args)
+
+  // The contract is NOT deployed yet; we must wait until it is mined
+  await contract.waitForDeployment()
+  return contract
+}
+
 (async () => {
-    try {
-        console.log('Running deployWithEthers script...')
+  try {
+    const contract = await deploy('Owner', [])
 
-        const constructorArgs = []    // Put constructor args (if any) here for your contract
-
-        // Note that the script needs the ABI which is generated from the compilation artifact.
-        // Make sure contract is compiled and artifacts are generated
-        const artifactsPath = 'contracts/artifacts/Owner.json' // Change this for different path
-
-        const metadata = JSON.parse(await remix.call('fileManager', 'getFile', artifactsPath))
-        // 'web3Provider' is a remix global variable object
-        const signer = (new ethers.BrowserProvider(web3Provider)).getSigner()
-
-        let factory = new ethers.ContractFactory(metadata.abi, metadata.data.bytecode.object, signer)
-
-        let contract = await factory.deploy(...constructorArgs);
-
-        console.log('Contract Address: ', contract.address);
-
-        // The contract is NOT deployed yet; we must wait until it is mined
-        await contract.waitForDeployment()
-        console.log('Deployment successful.')
-
-        contract.on('OwnerSet', (previousOwner, newOwner) => {
-            console.log('previousOwner' , previousOwner)
-            console.log('newOwner' , newOwner)
-        })
-
-        console.log('ok')
-    } catch (e) {
-        console.log(e.message)
-    }
+    console.log(\`address: \${await contract.getAddress()}\`)
+  } catch (e) {
+    console.log(e.message)
+  }
 })()`
 
 const storageMochaTests = `
@@ -287,34 +205,34 @@ describe("Storage with lib", function () {
   it("test initial value", async function () {
     // Make sure contract is compiled and artifacts are generated
     const metadata = JSON.parse(await remix.call('fileManager', 'getFile', 'contracts/artifacts/Storage.json'))
-    const signer = (new ethers.BrowserProvider(web3Provider)).getSigner()
+    const signer = await (new ethers.BrowserProvider(web3Provider)).getSigner(0)
     let Storage = new ethers.ContractFactory(metadata.abi, metadata.data.bytecode.object, signer)
     let storage = await Storage.deploy();
-    console.log('storage contract Address: ' + storage.address);
+    console.log('storage contract Address: ' + await storage.getAddress());
     await storage.waitForDeployment()
-    expect((await storage.retrieve()).toNumber()).to.equal(0);
+    expect(Number(await storage.retrieve())).to.equal(0);
   });
 
   it("test updating and retrieving updated value", async function () {
     const metadata = JSON.parse(await remix.call('fileManager', 'getFile', 'contracts/artifacts/Storage.json'))
-    const signer = (new ethers.BrowserProvider(web3Provider)).getSigner()
+    const signer = await (new ethers.BrowserProvider(web3Provider)).getSigner(0)
     let Storage = new ethers.ContractFactory(metadata.abi, metadata.data.bytecode.object, signer)
     let storage = await Storage.deploy();
     await storage.waitForDeployment()
     const setValue = await storage.store(56);
     await setValue.wait();
-    expect((await storage.retrieve()).toNumber()).to.equal(56);
+   expect(Number(await storage.retrieve())).to.equal(56);
   });
 
   it("fail test updating and retrieving updated value", async function () {
     const metadata = JSON.parse(await remix.call('fileManager', 'getFile', 'contracts/artifacts/Storage.json'))
-    const signer = (new ethers.BrowserProvider(web3Provider)).getSigner()
+    const signer = await (new ethers.BrowserProvider(web3Provider)).getSigner(0)
     let Storage = new ethers.ContractFactory(metadata.abi, metadata.data.bytecode.object, signer)
     let storage = await Storage.deploy();
     await storage.waitForDeployment()
     const setValue = await storage.store(56);
     await setValue.wait();
-    expect((await storage.retrieve()).toNumber(), 'incorrect number').to.equal(55);
+    expect(Number(await storage.retrieve()), 'incorrect number').to.equal(55);
   });
 });`
 

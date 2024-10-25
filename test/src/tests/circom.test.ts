@@ -6,14 +6,15 @@ module.exports = {
   '@disabled': true,
   before: function (browser: NightwatchBrowser, done: VoidFunction) {
     init(browser, done, 'http://127.0.0.1:8080?plugins=solidity,udapp', false, {
-        name: 'scriptRunner',
-        url: 'http://127.0.0.1:3000?template=default',
+      name: 'scriptRunner',
+      url: 'http://127.0.0.1:3000?template=default',
     })
-},
+  },
 
   'Should create semaphore workspace template #group6': function (browser: NightwatchBrowser) {
     browser
       //.clickLaunchIcon('filePanel')
+      .pause(2000)
       .waitForElementVisible('*[data-id="workspacesMenuDropdown"]')
       .click('*[data-id="workspacesMenuDropdown"]')
       .click('*[data-id="workspacecreate"]')
@@ -33,31 +34,38 @@ module.exports = {
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemtemplates/groth16_verifier.sol.ejs"]')
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemtemplates/plonk_verifier.sol.ejs"]')
   },
-  'Should run plonk trusted setup script for hash checker #group6': !function (browser: NightwatchBrowser) {
+  'Should run plonk trusted setup script for hash checker #group6': function (browser: NightwatchBrowser) {
     browser
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_trusted_setup.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')
       .waitForElementVisible('[data-id="verticalIconsKindcircuit-compiler"]')
       .click('[data-id="play-editor"]')
-      .pause(7000)
+      .waitForElementPresent({
+        locateStrategy: 'xpath',
+        selector: "//span[@class='text-log' and contains(text(), 'plonk setup')]",
+        timeout: 240000
+      })
       .journalLastChildIncludes('plonk setup')
-      .pause(10000)
+      .waitForElementPresent({
+        locateStrategy: 'xpath',
+        selector: "//span[@class='text-log' and contains(text(), 'setup done')]",
+        timeout: 240000
+      })
       .journalLastChildIncludes('setup done')
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts/plonk/zk/keys/verification_key.json"]')
   },
-  'Should run plonk zkproof script for hash checker #group6': !function (browser: NightwatchBrowser) {
+  'Should run plonk zkproof script for hash checker #group6': function (browser: NightwatchBrowser) {
     browser
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_zkproof.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')
       .waitForElementVisible('[data-id="verticalIconsKindcircuit-compiler"]')
       .click('[data-id="play-editor"]')
-      .pause(2000)
-      .journalLastChildIncludes('Compiling circuits/calculate_hash.circom')
-      .pause(5000)
-      .journalLastChildIncludes('Everything went okay')
-      .pause(5000)
-      .journalLastChildIncludes('zk proof validity')
-      .journalLastChildIncludes('proof done.')
+      .waitForElementPresent({
+        locateStrategy: 'xpath',
+        selector: "//span[@class='text-log' and contains(text(), 'proof done')]",
+        timeout: 240000
+      })
+      .journalChildIncludes('proof done')
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts/plonk/zk/build/zk_verifier.sol"]')
       .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts/plonk/zk/build/input.json"]')
   }
