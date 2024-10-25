@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -e
-SHA=$(git rev-parse --short --verify HEAD)
+SHA=$(git rev-parse --short --verify main)
+rm -rf projects
 cp -R build/* .
 git config user.email "filip.mertens@ethereum.org"
 git config user.name "bunsenstraat"

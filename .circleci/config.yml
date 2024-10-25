@@ -77,6 +77,7 @@ jobs:
     working_directory: ~/script-runner
     steps:
       - checkout
+      - run: yarn && yarn check:projects
       - run: git checkout gh-pages
       - run: git checkout main -- ci/deploy.sh
       - run: git checkout main -- .gitignore
@@ -92,6 +93,9 @@ jobs:
           name: Deploy
           command: |
             ./ci/deploy.sh
+      - run: 
+          name: check files
+          command: find projects
 workflows:
   version: 2
   main_workflow:
