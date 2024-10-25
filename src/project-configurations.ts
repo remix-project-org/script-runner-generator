@@ -11,12 +11,18 @@ export interface Replacements {
   [key: string]: string;
 }
 
+export interface customScriptRunnerConfig {
+  baseConfiguration: string;
+  dependencies: Dependency[];
+}
+
 export interface ProjectConfiguration {
   name: string;
   publish: boolean;
   description: string;
   dependencies: Dependency[];
   replacements: Replacements;
+  title: string;
 }
 
 export interface ProjectConfigurations {
@@ -33,6 +39,7 @@ export const projectConfigs: ProjectConfigurations = {
   projects: [
     {
       name: "default",
+      title: "Default",
       description: "Default project configuration using ethers 5",
       publish: true,
       dependencies: [
@@ -44,36 +51,8 @@ export const projectConfigs: ProjectConfigurations = {
           windowImport: true,
         },
         {
-          version: "^4",
-          name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "1.5.3",
-          name: "web3",
-          import: false,
-        },
-      ],
-
-      replacements: {
-      },
-    },
-    {
-      name: "zksync",
-      description: "ZkSync ethers template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^4",
-          name: "multihashes",
+          version: "^1.1.3",
+          name: "zokrates-js",
           import: true,
           windowImport: true,
         },
@@ -87,67 +66,6 @@ export const projectConfigs: ProjectConfigurations = {
           version: "^5.7.2",
           import: true,
           windowImport: true,
-        }
-      ],
-
-      replacements: {
-      },
-    },
-    {
-      name: "zokrates",
-      description: "zokrates template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^4",
-          name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          version: "^1.1.3",
-          name: "zokrates-js",
-          import: true,
-          windowImport: true,
-        },
-      ],
-      replacements: {
-      },
-    },
-    {
-      name: "starknet",
-      description: "snarknet template",
-      publish: true,
-      dependencies: [
-        {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^4",
-          name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
         },
         {
           version: "^5.19.5",
@@ -155,38 +73,11 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true,
         },
-      ],
-      replacements: {
-      },
-    },
-    {
-      name: "zk",
-      description: "snarkjs/circomlib template",
-      publish: true,
-      dependencies: [
         {
-          version: "^5",
-          name: "ethers",
-          alias: "ethersJS",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^4",
-          name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
-        {
-          version: "^1.5.3",
-          name: "web3",
-          import: false,
-        },
-        {
-          version: "^0.7.0",
+          version: "0.7.0",
           name: "snarkjs",
           import: true,
-          windowImport: true,
+          windowImport: false,
           require: true
         },
         {
@@ -194,17 +85,17 @@ export const projectConfigs: ProjectConfigurations = {
           name: "circomlibjs",
           import: true,
           windowImport: true,
-        },{
+        }, {
           name: "ffjavascript",
           version: "^0.2.62",
           import: true,
           windowImport: true
-        },{
+        }, {
           name: "big-integer",
           version: "^1.6.48",
           import: false,
           windowImport: false
-        },{
+        }, {
           name: "@zk-kit/incremental-merkle-tree",
           version: "^1.1.0",
           import: true,
@@ -212,7 +103,7 @@ export const projectConfigs: ProjectConfigurations = {
           alias: "zkkitIncrementalMerkleTree"
         },
         {
-          version: "^0.0.1-alpha.27",
+          version: "0.0.1-alpha.27",
           name: "sindri",
           import: true,
           windowImport: true,
@@ -223,20 +114,20 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true,
           alias: "semaphoreProtocolData"
-        },{
+        }, {
           name: "@semaphore-protocol/group",
           version: "^3.11.0",
           import: true,
           windowImport: true,
           alias: "semaphoreProtocolGroup"
-        },{
+        }, {
           name: "@semaphore-protocol/identity",
           version: "^3.11.0",
           import: true,
           windowImport: true,
           alias: "semaphoreProtocolIdentity"
         }
-        ,{
+        , {
           name: "@semaphore-protocol/proof",
           version: "^3.11.0",
           import: true,
@@ -244,11 +135,43 @@ export const projectConfigs: ProjectConfigurations = {
           alias: "semaphoreProtocolProof"
         }
       ],
+
+      replacements: {
+      },
+    },
+    {
+      name: "zksyncv6",
+      title: "ZkSync v6",
+      description: "ZkSync v6 with Ethers 6 template",
+      publish: true,
+      dependencies: [
+        {
+          version: "^6",
+          name: "ethers",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },
+
+        {
+          version: "1.5.3",
+          name: "web3",
+          import: false,
+        },
+        {
+          name: "zksync-ethers",
+          version: "^6",
+          import: true,
+          windowImport: true,
+        }
+      ],
+
       replacements: {
       },
     },
     {
       name: "ethers6",
+      title: "Ethers 6",
       description: "ethers6 template",
       publish: true,
       dependencies: [
@@ -260,11 +183,11 @@ export const projectConfigs: ProjectConfigurations = {
           windowImport: true,
         },
         {
-          version: "^4",
-          name: "multihashes",
-          import: true,
-          windowImport: true,
-        },
+          version: "1.5.3",
+          name: "web3",
+          import: false,
+        }
+
       ],
       replacements: {
       },

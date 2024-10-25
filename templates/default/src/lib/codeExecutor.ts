@@ -5,7 +5,7 @@ import * as path from 'path'
 import './runWithMocha'
 import * as web3Js from 'web3'
 
-const scriptReturns:  { [key: string]: any } = {} // keep track of modules exported values
+const scriptReturns: { [key: string]: any } = {} // keep track of modules exported values
 const fileContents: { [key: string]: any } = {} // keep track of file content
 declare global {
   interface Window {
@@ -15,25 +15,63 @@ declare global {
 }
 
 const testweb3Provider = {
-    sendAsync(payload: any, callback: any) {
-        window.remix.call('web3Provider', 'sendAsync', payload)
-            .then((result: any) => callback(null, result))
-            .catch((e: any) => callback(e))
-    }
+  sendAsync(payload: any, callback: any) {
+    window.remix.call('web3Provider', 'sendAsync', payload)
+      .then((result: any) => callback(null, result))
+      .catch((e: any) => callback(e))
+  }
 }
 
 window.require = (module: string) => {
-    //console.log('window.require', module)
-    //console.log(scriptReturns, fileContents)
-    if (module === 'web3') {
-        return web3Js.default
+
+  // Handle web3 case
+  if (module === 'web3') {
+    return web3Js.default;
+  }
+
+  // Standard cases for libraries directly on window
+  if (window[module]) return window[module]; // library
+  if (window['_' + module]) return window['_' + module]; // library
+
+  // Handle JSON or ABI files
+  if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) {
+    return JSON.parse(fileContents[window.__execPath__][module]);
+  }
+
+  // Handle other script-returned modules
+  else if (window.__execPath__ && scriptReturns[window.__execPath__]) {
+    return scriptReturns[window.__execPath__][module]; // module exported values
+  }
+
+  // Handle submodules dynamically
+  else if (module.includes('/')) {
+    const [baseModule, ...submodules] = module.split('/');
+
+    if (!window[baseModule]) {
+      console.log(`${baseModule} is not loaded on the window`)
+      window.remix.emit('dependencyError', { data: [`${baseModule} is not available as a dependency`] })
+      throw new Error(`${baseModule} is not available as a dependency`);
     }
-    if (window[module]) return window[module] // library
-    if (window['_' + module]) return window['_' + module] // library
-    else if ((module.endsWith('.json') || module.endsWith('.abi')) && window.__execPath__ && fileContents[window.__execPath__]) return JSON.parse(fileContents[window.__execPath__][module])
-    else if (window.__execPath__ && scriptReturns[window.__execPath__]) return scriptReturns[window.__execPath__][module] // module exported values
-    else throw new Error(`${module} module require is not supported by Remix IDE`)
-}
+
+    // Traverse through the submodules and return the correct module
+    let currentModule = window[baseModule];
+    for (const submodule of submodules) {
+      if (currentModule[submodule]) {
+        currentModule = currentModule[submodule];
+      } else {
+        window.remix.emit('dependencyError', { data: [`${module} is not available as a submodule. Available submodules are: ${Object.keys(currentModule).join(', ')}`] })
+        throw new Error(`${module} is not available as a submodule. Available submodules are: ${Object.keys(currentModule).join(', ')}`);
+      }
+    }
+    return currentModule;
+  }
+  // Module not found
+
+  else {
+    window.remix.emit('dependencyError', { data: [`${module} module require is not supported by Remix IDE`] })
+    throw new Error(`${module} module require is not supported by Remix IDE`);
+  }
+};
 
 class CodeExecutor extends PluginClient {
   async execute(script: string, filePath: string) {
@@ -54,7 +92,6 @@ class CodeExecutor extends PluginClient {
           }
         });
         script = transpiled.outputText;
-        //console.log('transpiled', transpiled.outputText)
         // extract all the "require", execute them and store the returned values.
         const regexp = /require\((.*?)\)/g
         const array = [...script.matchAll(regexp)];
@@ -74,20 +111,33 @@ class CodeExecutor extends PluginClient {
         }
 
         // execute the script
-        script = `const exports = {};
-                  const module = { exports: {} }
-                  window.__execPath__ = "${fromPath}"
-                  ${script};
-                  return exports || module.exports`
-        //console.log('script', script, scriptReturns, fileContents)
-        const returns = (new Function(script))()
-        //console.log('returns', returns, scriptReturns, fileContents)
+
+        script = `
+        try {
+            const exports = {};
+            const module = { exports: {} }
+            window.__execPath__ = "${fromPath}"
+            ${script};
+            return exports || module.exports;
+        } catch (err) {
+            // Include the script location and throw it upwards
+            throw new Error('Error in script from path "${fromPath}": ' + err.message + '\\n' + err.stack);
+        }
+    `;
+
+        const returns = await (new Function(script))();
+
         if (mocha.suite && ((mocha.suite.suites && mocha.suite.suites.length) || (mocha.suite.tests && mocha.suite.tests.length))) {
           console.log(`RUNS ${filePath}....`)
           mocha.run()
         }
         return returns
       } catch (e: any) {
+
+        // Handle the error and log with detailed trace
+        console.error('An error occurred while running the script:', e);
+        console.error('Script source:', script);  // Show the original script for context
+
         console.error('error', {
           data: [e.message]
         })

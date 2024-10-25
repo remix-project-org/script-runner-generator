@@ -6,7 +6,7 @@ module.exports = {
     before: function (browser: NightwatchBrowser, done: VoidFunction) {
         init(browser, done, 'http://127.0.0.1:8080?plugins=solidity,udapp', false, {
             name: 'scriptRunner',
-            url: 'http://127.0.0.1:3000?template=zksync',
+            url: 'http://127.0.0.1:3000?template=default',
         })
     },
     'Should exec a zk-sync TS file': function (browser: NightwatchBrowser) {
