@@ -93,9 +93,6 @@ jobs:
           name: Deploy
           command: |
             ./ci/deploy.sh
-      - run: 
-          name: check files
-          command: find projects
 workflows:
   version: 2
   main_workflow:
