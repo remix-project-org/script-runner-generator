@@ -34,5 +34,4 @@ window.ethereum = window.web3Provider
 
 window.web3 = new Web3(window.web3Provider)
 
-console.log('web3 created....', window.web3)
 
