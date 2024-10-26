@@ -40,7 +40,7 @@ export const projectConfigs: ProjectConfigurations = {
     {
       name: "default",
       title: "Default",
-      description: "Default project configuration using ethers 5",
+      description: "Default project configuration. To use ethers v6 and zksync-ethers v6, use the respective configurations",
       publish: true,
       dependencies: [
         {
@@ -141,8 +141,8 @@ export const projectConfigs: ProjectConfigurations = {
     },
     {
       name: "zksyncv6",
-      title: "ZkSync v6",
-      description: "ZkSync v6 with Ethers 6 template",
+      title: "ZkSync-ethers v6",
+      description: "ZkSync v6 with Ethers v6",
       publish: true,
       dependencies: [
         {
@@ -172,7 +172,7 @@ export const projectConfigs: ProjectConfigurations = {
     {
       name: "ethers6",
       title: "Ethers 6",
-      description: "ethers6 template",
+      description: "A configuration with ethers v6",
       publish: true,
       dependencies: [
         {
