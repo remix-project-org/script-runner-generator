@@ -63,7 +63,7 @@ export const projectConfigs: ProjectConfigurations = {
         },
         {
           name: "zksync-ethers",
-          version: "^5.7.2",
+          version: "^5.10.0",
           import: true,
           windowImport: true,
         },
