@@ -133,6 +133,16 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true,
           alias: "semaphoreProtocolProof"
+        }, {
+          name: "crypto-js",
+          version: "^4.2.0",
+          import: true,
+          windowImport: true,
+        }, {
+          name: "aes-js",
+          version: "^3.1.2",
+          import: true,
+          windowImport: true,
         }
       ],
 
