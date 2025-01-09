@@ -150,6 +150,33 @@ export const projectConfigs: ProjectConfigurations = {
       },
     },
     {
+      name: "starknet6.11",
+      title: "starknet v6.11",
+      description: "Starknet v6.11 project configuration.",
+      publish: true,
+      dependencies: [
+        {
+          version: "^5.19.5",
+          name: "starknet",
+          import: true,
+          windowImport: true,
+        }, {
+          name: "crypto-js",
+          version: "^4.2.0",
+          import: true,
+          windowImport: true,
+        }, {
+          name: "aes-js",
+          version: "^3.1.2",
+          import: true,
+          windowImport: true,
+        }
+      ],
+
+      replacements: {
+      },
+    },
+    {
       name: "zksyncv6",
       title: "ZkSync-ethers v6",
       description: "ZkSync v6 with Ethers v6",
