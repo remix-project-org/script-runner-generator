@@ -156,7 +156,7 @@ export const projectConfigs: ProjectConfigurations = {
       publish: true,
       dependencies: [
         {
-          version: "^5.19.5",
+          version: "^6.11.0",
           name: "starknet",
           import: true,
           windowImport: true,
