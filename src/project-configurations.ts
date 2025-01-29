@@ -209,12 +209,12 @@ export const projectConfigs: ProjectConfigurations = {
       publish: true,
       dependencies: [
         {
-          version: "^1",
+          version: "1.0.0-beta.1",
           name: "@noir-lang/noir_wasm",
           import: true,
         },
         {
-          version: "^1",
+          version: "1.0.0-beta.1",
           name: "@noir-lang/noir_js",
           import: true,
         },
