@@ -202,6 +202,26 @@ export const projectConfigs: ProjectConfigurations = {
       replacements: {
       },
     },
+    {
+      name: "noir1",
+      title: "Noir 1",
+      description: "A configuration with Noir v1",
+      publish: true,
+      dependencies: [
+        {
+          version: "^1",
+          name: "@noir-lang/noir_js",
+          import: true,
+        },
+        {
+          version: "0.72.1",
+          name: "@aztec/bb.js",
+          import: true,
+        }
+      ],
+      replacements: {
+      },
+    },
     // Add other projects here as needed
   ],
 };
