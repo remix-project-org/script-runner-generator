@@ -210,6 +210,11 @@ export const projectConfigs: ProjectConfigurations = {
       dependencies: [
         {
           version: "^1",
+          name: "@noir-lang/noir_wasm",
+          import: true,
+        },
+        {
+          version: "^1",
           name: "@noir-lang/noir_js",
           import: true,
         },
