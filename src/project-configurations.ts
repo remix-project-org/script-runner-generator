@@ -212,16 +212,20 @@ export const projectConfigs: ProjectConfigurations = {
           version: "1.0.0-beta.1",
           name: "@noir-lang/noir_wasm",
           import: true,
+          windowImport: true,
         },
         {
           version: "1.0.0-beta.1",
           name: "@noir-lang/noir_js",
           import: true,
+          windowImport: true,
         },
         {
           version: "0.72.1",
           name: "@aztec/bb.js",
           import: true,
+          alias: "aztecBBJS",
+          windowImport: true,
         }
       ],
       replacements: {

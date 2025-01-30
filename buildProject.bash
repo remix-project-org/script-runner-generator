@@ -14,11 +14,14 @@ if ! yarn; then
 fi
 
 # Run yarn build and capture output in case of failure
-if ! yarn build 2>&1; then
+output=$(yarn build 2>&1)
+exit_code=$?
+
+if [ $exit_code -ne 0 ]; then
   echo "Error: yarn build failed for project $projectname"
   echo "Yarn build error output:"
-  yarn build 2>&1 # re-run yarn build to output the error to the console
-  exit 1
+  echo "$output"
+  exit $exit_code
 fi
 
 # if projects directory does not exist, create it

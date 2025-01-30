@@ -31,6 +31,7 @@ module.exports = {
       constants: require.resolve("constants-browserify"),
       http: require.resolve("stream-http"),
       https: require.resolve("https-browserify"),
+      worker_threads: false,
       zlib: false,
       'child_process': false
     },

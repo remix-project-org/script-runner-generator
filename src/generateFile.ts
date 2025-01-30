@@ -327,6 +327,16 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
       // Convert the output buffer to a string and log it
       console.log(out.toString());
     } catch (error) {
+      
+      if((error as any).stderr) {
+        console.error((error as any).stderr.toString());
+      }
+      if((error as any).stdout) {
+        console.error((error as any).stdout.toString());
+      }
+      if((error as any).output) {
+        console.error((error as any).output.toString());
+      }
       if (error instanceof Error) {
         const execError = error as ExecSyncError;
         const errString = execError.stderr.toString()
@@ -337,10 +347,10 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
           // only show error lines
           if (err.includes('error')) console.error(err);
         });
-        //console.error(execError.stderr.toString());
+        console.error(execError.stderr.toString());
         exit(1)
       } else {
-        //console.error('Unknown error', error);
+        console.error('Unknown error', error);
       }
     }
   }
