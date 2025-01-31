@@ -27,14 +27,14 @@ export interface ProjectConfiguration {
 
 export interface ProjectConfigurations {
   templateDir: string;
-  defaultTemplateDir: string;
+  baseTemplateDir: string;
   tsTemplate: string;
   projects: ProjectConfiguration[];
 }
 
 export const projectConfigs: ProjectConfigurations = {
   templateDir: "./templates/",
-  defaultTemplateDir: "./templates/default",
+  baseTemplateDir: "./templates/base",
   tsTemplate: "src/script-runner.ts",
   projects: [
     {
