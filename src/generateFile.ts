@@ -219,7 +219,8 @@ const generateImportStatement = (dep: Dependency): string => {
   // If windowImport is true, add the window assignment
   if (dep.windowImport === undefined || dep.windowImport === true) {
     const alias = dep.alias || dep.name;
-    importStatement += `window['${dep.name}'] = ${alias.replace(/[^a-zA-Z0-9]/g, '_')};\n`;
+    const windowAlias = dep.windowAlias || dep.name;
+    importStatement += `window['${windowAlias}'] = ${alias.replace(/[^a-zA-Z0-9]/g, '_')};\n`;
   }
 
   return importStatement;

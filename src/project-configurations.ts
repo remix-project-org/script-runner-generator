@@ -5,6 +5,7 @@ export interface Dependency {
   import: boolean;
   require?: boolean;
   windowImport?: boolean;
+  windowAlias?: string;
 }
 
 export interface Replacements {
@@ -72,6 +73,7 @@ export const projectConfigs: ProjectConfigurations = {
           name: "starknet",
           import: true,
           windowImport: true,
+          windowAlias: "_starknet"
         },
         {
           version: "0.7.0",
