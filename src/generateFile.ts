@@ -131,7 +131,7 @@ const copyRecursiveSync = (src: string, dest: string) => {
 };
 
 // Helper function to check if a project-specific file exists in the project's subdirectory of templateDir
-const getFilePath = (projectName: string, templateDir: string | undefined, defaultTemplateDir: string, fileName: string): string => {
+const getFilePath = (projectName: string, templateDir: string | undefined, baseTemplateDir: string, fileName: string): string => {
   if (templateDir) {
     // Check for project-specific file first (e.g., templates/custom/project-one/customCode.ts)
     const projectSpecificPath = path.join(templateDir, projectName, fileName);
@@ -146,7 +146,7 @@ const getFilePath = (projectName: string, templateDir: string | undefined, defau
     }
   }
   // Fall back to default template directory if file is not found in the project-specific directory
-  return path.join(defaultTemplateDir, fileName);
+  return path.join(baseTemplateDir, fileName);
 };
 
 // Function to perform replacements in the template
@@ -155,14 +155,14 @@ const performReplacements = (
   replacements: { [placeholder: string]: string },
   projectName: string,
   templateDir: string | undefined,
-  defaultTemplateDir: string
+  baseTemplateDir: string
 ): string => {
   let updatedTemplate = template;
 
   // Iterate through each placeholder and its corresponding file
   Object.entries(replacements).forEach(([placeholder, fileName]) => {
     // Get the full path to the replacement file (use project-specific or default template)
-    const filePath = getFilePath(projectName, templateDir, defaultTemplateDir, fileName);
+    const filePath = getFilePath(projectName, templateDir, baseTemplateDir, fileName);
 
     // Read the content of the file that corresponds to the placeholder
     const fileContent = fs.readFileSync(filePath, 'utf8');
@@ -175,10 +175,10 @@ const performReplacements = (
 };
 
 // Function to copy only files from the `files` subdirectory of the template directories
-const copyTemplateFiles = (src: string, projectName: string, templateDir: string | undefined, defaultTemplateDir: string, projectDir: string) => {
+const copyTemplateFiles = (src: string, projectName: string, templateDir: string | undefined, baseTemplateDir: string, projectDir: string) => {
 
-  // Default files directory within defaultTemplateDir
-  const defaultFilesDir = path.join(defaultTemplateDir, src);
+  // Default files directory within baseTemplateDir
+  const defaultFilesDir = path.join(baseTemplateDir, src);
   if (fs.existsSync(defaultFilesDir)) {
     copyRecursiveSync(defaultFilesDir, projectDir);
   }
@@ -217,16 +217,17 @@ const generateImportStatement = (dep: Dependency): string => {
   }
 
   // If windowImport is true, add the window assignment
-  if (dep.windowImport) {
+  if (dep.windowImport === undefined || dep.windowImport === true) {
     const alias = dep.alias || dep.name;
-    importStatement += `window['${dep.name}'] = ${alias.replace(/[^a-zA-Z0-9]/g, '_')};\n`;
+    const windowAlias = dep.windowAlias || dep.name;
+    importStatement += `window['${windowAlias}'] = ${alias.replace(/[^a-zA-Z0-9]/g, '_')};\n`;
   }
 
   return importStatement;
 };
 
 const templateDir = projectConfigs.templateDir;
-const defaultTemplateDir = projectConfigs.defaultTemplateDir;
+const baseTemplateDir = projectConfigs.baseTemplateDir;
 const tsTemplate = projectConfigs.tsTemplate;
 
 console.log(JSON.stringify(projectConfigs.projects, null, 2));
@@ -254,16 +255,16 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   fs.mkdirSync(projectDir, { recursive: true });
 
   // Construct the full path to the TypeScript template file (use project-specific or default template)
-  const tsTemplatePath = getFilePath(name, templateDir, defaultTemplateDir, tsTemplate);
+  const tsTemplatePath = getFilePath(name, templateDir, baseTemplateDir, tsTemplate);
 
   // Read the TypeScript template file
   const templateContent: string = fs.readFileSync(tsTemplatePath, 'utf8');
 
   // Perform the replacements in the template
-  const finalTsContent = performReplacements(templateContent, replacements, name, templateDir, defaultTemplateDir);
+  const finalTsContent = performReplacements(templateContent, replacements, name, templateDir, baseTemplateDir);
 
   // Read the default package.json template
-  const defaultPackageJsonPath = path.join(defaultTemplateDir, 'defaultPackage.json');
+  const defaultPackageJsonPath = path.join(baseTemplateDir, 'defaultPackage.json');
   const defaultPackageJson = JSON.parse(fs.readFileSync(defaultPackageJsonPath, 'utf8'));
 
   // Create the project-specific package.json content
@@ -306,15 +307,15 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
 
   // Copy only files from the `files` subdirectory of both the template and default template directories
   const filesDir = path.join(srcDir, 'lib');
-  copyTemplateFiles('src/lib', name, templateDir, defaultTemplateDir, filesDir);
+  copyTemplateFiles('src/lib', name, templateDir, baseTemplateDir, filesDir);
 
   // Copy webpack.config.js file to the project directory
   const configDir = path.join(projectDir, 'webpack.config.js');
-  copyTemplateFiles('webpack.config.js', name, templateDir, defaultTemplateDir, configDir);
+  copyTemplateFiles('webpack.config.js', name, templateDir, baseTemplateDir, configDir);
 
   // copy tsconfig.json file to the project directory
   const tsconfigDir = path.join(projectDir, 'tsconfig.json');
-  copyTemplateFiles('tsconfig.json', name, templateDir, defaultTemplateDir, tsconfigDir);
+  copyTemplateFiles('tsconfig.json', name, templateDir, baseTemplateDir, tsconfigDir);
 
   // Change directory to the project folder and run yarn to install dependencies
   console.log(`Installing dependencies in ${projectDir}...`);
@@ -327,6 +328,16 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
       // Convert the output buffer to a string and log it
       console.log(out.toString());
     } catch (error) {
+      
+      if((error as any).stderr) {
+        console.error((error as any).stderr.toString());
+      }
+      if((error as any).stdout) {
+        console.error((error as any).stdout.toString());
+      }
+      if((error as any).output) {
+        console.error((error as any).output.toString());
+      }
       if (error instanceof Error) {
         const execError = error as ExecSyncError;
         const errString = execError.stderr.toString()
@@ -337,10 +348,10 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
           // only show error lines
           if (err.includes('error')) console.error(err);
         });
-        //console.error(execError.stderr.toString());
+        console.error(execError.stderr.toString());
         exit(1)
       } else {
-        //console.error('Unknown error', error);
+        console.error('Unknown error', error);
       }
     }
   }

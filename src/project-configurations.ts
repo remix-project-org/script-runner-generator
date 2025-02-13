@@ -5,6 +5,7 @@ export interface Dependency {
   import: boolean;
   require?: boolean;
   windowImport?: boolean;
+  windowAlias?: string;
 }
 
 export interface Replacements {
@@ -27,14 +28,14 @@ export interface ProjectConfiguration {
 
 export interface ProjectConfigurations {
   templateDir: string;
-  defaultTemplateDir: string;
+  baseTemplateDir: string;
   tsTemplate: string;
   projects: ProjectConfiguration[];
 }
 
 export const projectConfigs: ProjectConfigurations = {
   templateDir: "./templates/",
-  defaultTemplateDir: "./templates/default",
+  baseTemplateDir: "./templates/base",
   tsTemplate: "src/script-runner.ts",
   projects: [
     {
@@ -72,6 +73,7 @@ export const projectConfigs: ProjectConfigurations = {
           name: "starknet",
           import: true,
           windowImport: true,
+          windowAlias: "_starknet"
         },
         {
           version: "0.7.0",
