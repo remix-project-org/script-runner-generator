@@ -33,7 +33,8 @@
         "version": "^5.19.5",
         "name": "starknet",
         "import": true,
-        "windowImport": true
+        "windowImport": true,
+        "windowAlias": "_starknet"
       },
       {
         "version": "0.7.0",
