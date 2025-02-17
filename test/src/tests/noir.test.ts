@@ -13,7 +13,6 @@ module.exports = {
         browser
             .addFile('test.ts', { content: testFile })
             .executeScriptInTerminal('remix.execute("test.ts")')
-            .pause()
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'Passed: 1', 60000)
     }
 }
