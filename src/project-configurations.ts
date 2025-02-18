@@ -145,6 +145,11 @@ export const projectConfigs: ProjectConfigurations = {
           version: "^3.1.2",
           import: true,
           windowImport: true,
+        }, {
+          name: "multihashes",
+          version: "^4.0.3",
+          import: true,
+          windowImport: true,
         }
       ],
 
