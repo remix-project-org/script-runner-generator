@@ -40,7 +40,7 @@ describe('Starknet Library Test', function () {
     it('should fetch the latest block number', async function () {
         // Use dRPC Sepolia RPC endpoint
         const myProvider = new RpcProvider({
-            nodeUrl: constants.NetworkName.SN_SEPOLIA,
+            nodeUrl: 'https://starknet-sepolia.drpc.org',
         })
 
         const chainId = await myProvider.getChainId()
