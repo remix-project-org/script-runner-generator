@@ -37,7 +37,7 @@ import {
 } from 'starknet'
 
 describe('Starknet Library Test', function () {
-    it('should fetch the latest block number', async function () {
+    it('run starknet tests', async function () {
         // Use dRPC Sepolia RPC endpoint
         const myProvider = new RpcProvider({
             nodeUrl: 'https://starknet-sepolia.drpc.org',
