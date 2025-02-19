@@ -265,6 +265,25 @@ export const projectConfigs: ProjectConfigurations = {
       ],
       replacements: {
       },
+    },{
+      name: "chainlink",
+      title: "Chainlink",
+      description: "A configuration with Chainlink",
+      publish: true,
+      dependencies: [
+        {
+          version: "latest",
+          name: "@chainlink/functions-toolkit",
+          import: true,
+          windowImport: true
+        },{
+          version: "latest",
+          name: "@chainlink/ccip-js",
+          import: true,
+          windowImport: true
+        }
+      ],
+      replacements: {}
     }
     // Add other projects here as needed
   ],
