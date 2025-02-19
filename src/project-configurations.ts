@@ -204,6 +204,33 @@ export const projectConfigs: ProjectConfigurations = {
       replacements: {
       },
     },
+    {
+      name: "noir",
+      title: "Noir",
+      description: "A configuration with Noir",
+      publish: true,
+      dependencies: [
+        {
+          version:"^1.0.0-beta.1",
+          name: "@noir-lang/noir_wasm",
+          import: true,
+          windowImport: true
+        },{
+          version: "latest",
+          name: "@noir-lang/noir_js",
+          import: true,
+          windowImport: true
+        },
+        {
+          version: "^0.76.4",
+          name: "@aztec/bb.js",
+          import: true,
+          windowImport: true
+        }
+      ],
+      replacements: {
+      },
+    }
     // Add other projects here as needed
   ],
 };
