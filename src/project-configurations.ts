@@ -233,18 +233,19 @@ export const projectConfigs: ProjectConfigurations = {
         }
       ],
       replacements: {}
-     },
+    },
+    {
       name: "noir",
       title: "Noir",
       description: "A configuration with Noir",
       publish: true,
       dependencies: [
         {
-          version:"^1.0.0-beta.1",
+          version: "^1.0.0-beta.1",
           name: "@noir-lang/noir_wasm",
           import: true,
           windowImport: true
-        },{
+        }, {
           version: "latest",
           name: "@noir-lang/noir_js",
           import: true,
