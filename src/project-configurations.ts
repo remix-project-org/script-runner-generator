@@ -210,17 +210,42 @@ export const projectConfigs: ProjectConfigurations = {
       },
     },
     {
+      name: "starknet6.11",
+      title: "starknet v6.11",
+      description: "Starknet v6.11 project configuration.",
+      publish: true,
+      dependencies: [
+        {
+          version: "^5.19.5",
+          name: "starknet",
+          import: true,
+          windowImport: true,
+        }, {
+          name: "crypto-js",
+          version: "^4.2.0",
+          import: true,
+          windowImport: true,
+        }, {
+          name: "aes-js",
+          version: "^3.1.2",
+          import: true,
+          windowImport: true,
+        }
+      ],
+      replacements: {}
+    },
+    {
       name: "noir",
       title: "Noir",
       description: "A configuration with Noir",
       publish: true,
       dependencies: [
         {
-          version:"^1.0.0-beta.1",
+          version: "^1.0.0-beta.1",
           name: "@noir-lang/noir_wasm",
           import: true,
           windowImport: true
-        },{
+        }, {
           version: "latest",
           name: "@noir-lang/noir_js",
           import: true,
