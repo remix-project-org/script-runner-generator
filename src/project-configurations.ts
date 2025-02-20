@@ -150,6 +150,11 @@ export const projectConfigs: ProjectConfigurations = {
           version: "^4.0.3",
           import: true,
           windowImport: true,
+        }, {
+          name: "openai",
+          version: "latest",
+          import: true,
+          windowImport: true
         }
       ],
 
