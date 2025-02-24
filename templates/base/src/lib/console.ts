@@ -1,33 +1,29 @@
-import { isBigInt } from 'web3-validator'
+import { isBigInt } from 'web3-validator';
+
 const replacer = (key: string, value: any) => {
-  if (isBigInt(value)) value = value.toString()
-  if (typeof value === 'function') value = value.toString()
-  return value
-}
-(console as any).logInternal = console.log
-console.log = function () {
-  window.remix.emit('log', {
-    data: Array.from(arguments).map((el) => JSON.parse(JSON.stringify(el, replacer)))
-  })
+  if (isBigInt(value)) return value.toString(); // Convert BigInt to string
+  if (typeof value === 'function') return undefined; // Remove functions
+  if (value instanceof Error) {
+    return {
+      message: value.message,
+      name: value.name,
+      stack: value.stack,
+    }; // Properly serialize Error objects
+  }
+  return value;
 };
 
-(console as any).infoInternal = console.info;
-console.info = function () {
-  window.remix.emit('info', {
-    data: Array.from(arguments).map((el) => JSON.parse(JSON.stringify(el, replacer)))
-  })
+const wrapConsoleMethod = (method: 'log' | 'info' | 'warn' | 'error') => {
+  const original = console[method].bind(console);
+  console[method] = function (...args: any[]) {
+    window.remix.emit(method, {
+      data: args.map(el => JSON.parse(JSON.stringify(el, replacer))),
+    });
+    original(...args);
+  };
 };
 
-(console as any).warnInternal = console.warn
-console.warn = function () {
-  window.remix.emit('warn', {
-    data: Array.from(arguments).map((el) => JSON.parse(JSON.stringify(el, replacer)))
-  })
-};
-
-(console as any).errorInternal = console.error
-console.error = function () {
-  window.remix.emit('error', {
-    data: Array.from(arguments).map((el) => JSON.parse(JSON.stringify(el, replacer)))
-  })
-}
+wrapConsoleMethod('log');
+wrapConsoleMethod('info');
+wrapConsoleMethod('warn');
+wrapConsoleMethod('error');
