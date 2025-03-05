@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = {
   entry: './src/script-runner.ts', // Update the entry point to your TypeScript file
@@ -33,7 +34,7 @@ module.exports = {
       http: require.resolve("stream-http"),
       https: require.resolve("https-browserify"),
       zlib: false,
-      'child_process': false
+      'child_process': false,
     },
     alias: {
       process: 'process/browser',
@@ -57,6 +58,19 @@ module.exports = {
       Buffer: ["buffer", "Buffer"],
       process: 'process/browser',
     }),
-    //new BundleAnalyzerPlugin()
+    new NodePolyfillPlugin(),
+    new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+      const mod = resource.request.replace(/^node:/, "");
+      switch (mod) {
+        case "net":
+          resource.request = "net-browserify"; // Example: Replace 'net' with a browser polyfill
+          break;
+        case "path":
+          resource.request = "path-browserify"; // Use a browser crypto implementation
+          break;
+        default:
+          throw new Error(`Unsupported Node.js module: ${mod}`);
+      }
+    }),
   ]
 };
