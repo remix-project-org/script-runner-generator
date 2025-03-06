@@ -226,6 +226,7 @@ export const projectConfigs: ProjectConfigurations = {
           name: "starknet",
           import: true,
           windowImport: true,
+          windowAlias: "_starknet"
         }, {
           name: "crypto-js",
           version: "^4.2.0",
