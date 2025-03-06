@@ -156,11 +156,6 @@ export const projectConfigs: ProjectConfigurations = {
           version: "latest",
           import: true,
           windowImport: true
-        }, {
-          name: "viem",
-          version: "latest",
-          import: true,
-          windowImport: true
         }
       ],
 
