@@ -7,6 +7,8 @@ jobs:
     parallelism: 6
     docker:
       - image: cimg/node:20.0.0-browsers
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=4096" # Set globally for all Node.js scripts
     working_directory: ~/script-runner
     steps:  # This is required to define the steps within the command
       - checkout
@@ -37,6 +39,8 @@ jobs:
     parallelism: 10
     docker:
       - image: cimg/node:20.9-browsers
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=4096" # Set globally for all Node.js scripts
     working_directory: ~/script-runner
     steps:
       - checkout
