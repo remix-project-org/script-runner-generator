@@ -119,6 +119,12 @@
         "version": "^4.0.3",
         "import": true,
         "windowImport": true
+      },
+      {
+        "name": "openai",
+        "version": "latest",
+        "import": true,
+        "windowImport": true
       }
     ],
     "replacements": {}
@@ -181,7 +187,8 @@
         "version": "^5.19.5",
         "name": "starknet",
         "import": true,
-        "windowImport": true
+        "windowImport": true,
+        "windowAlias": "_starknet"
       },
       {
         "name": "crypto-js",
