@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "generate": "yarn ts-node ./src/generateFile.ts",
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' yarn ts-node ./src/generateFile.ts --projects=all --build",
+    "build": "yarn ts-node ./src/generateFile.ts --projects=all --build",
     "install:project": "./installProject.bash",
     "build:project": "./buildProject.bash",
     "check:projects": "yarn ts-node ./src/checkProjects.ts",

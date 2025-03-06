@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: cimg/node:20.0.0-browsers
     environment:
-      NODE_OPTIONS: "--max-old-space-size=4096" # Set globally for all Node.js scripts
+      NODE_OPTIONS: "--max-old-space-size=8192" # Set globally for all Node.js scripts NODE_OPTIONS="--max-old-space-size=8192"
     working_directory: ~/script-runner
     steps:  # This is required to define the steps within the command
       - checkout
@@ -40,7 +40,7 @@ jobs:
     docker:
       - image: cimg/node:20.9-browsers
     environment:
-      NODE_OPTIONS: "--max-old-space-size=4096" # Set globally for all Node.js scripts
+      NODE_OPTIONS: "--max-old-space-size=8192" # Set globally for all Node.js scripts
     working_directory: ~/script-runner
     steps:
       - checkout
