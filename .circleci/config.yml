@@ -5,8 +5,8 @@ orbs:
 jobs:
   build:
     parallelism: 6
-    docker:
-      - image: cimg/node:20.0.0-browsers
+    machine:
+      image: ubuntu-2204:current
     resource_class:
       large
     working_directory: ~/script-runner
