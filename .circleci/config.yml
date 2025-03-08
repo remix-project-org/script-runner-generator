@@ -36,9 +36,11 @@ jobs:
             - "persist"
 
   test:
-    parallelism: 10
-    docker:
-      - image: cimg/node:20.9-browsers
+    parallelism: 11
+    machine:
+      image: ubuntu-2204:current
+    resource_class:
+      large
     working_directory: ~/script-runner
     steps:
       - checkout
