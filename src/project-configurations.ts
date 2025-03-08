@@ -6,6 +6,7 @@ export interface Dependency {
   require?: boolean;
   windowImport?: boolean;
   windowAlias?: string;
+  resolveEports?: boolean;
 }
 
 export interface Replacements {
@@ -266,6 +267,49 @@ export const projectConfigs: ProjectConfigurations = {
       ],
       replacements: {
       },
+    }, {
+      name: "chainlink",
+      title: "Chainlink",
+      description: "A configuration with Chainlink",
+      publish: true,
+      dependencies: [
+        {
+          version: "latest",
+          name: "@chainlink/functions-toolkit",
+          import: true,
+          windowImport: true
+        }, {
+          version: "latest",
+          name: "@chainlink/ccip-js",
+          import: true,
+          windowImport: true
+        },
+        {
+          name: "viem",
+          version: "latest",
+          import: true,
+          windowImport: true,
+          resolveEports: true,
+          require: true
+        }, {
+          version: "^6",
+          name: "ethers",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },
+        {
+          version: "1.5.3",
+          name: "web3",
+          import: false,
+        }, {
+          name: "net-browserify",
+          version: "latest",
+          import: false,
+          windowImport: false
+        }
+      ],
+      replacements: {}
     }
     // Add other projects here as needed
   ],
