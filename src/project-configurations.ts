@@ -302,6 +302,11 @@ export const projectConfigs: ProjectConfigurations = {
           version: "1.5.3",
           name: "web3",
           import: false,
+        }, {
+          name: "net-browserify",
+          version: "latest",
+          import: false,
+          windowImport: false
         }
       ],
       replacements: {}
