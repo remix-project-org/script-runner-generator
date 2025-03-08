@@ -198,7 +198,92 @@ const copyTemplateFiles = (src: string, projectName: string, templateDir: string
   }
 };
 
-// Function to determine if a dependency should be imported, required, or added to window object
+const resolvePackageExports = (packageName: string, projectDir: string): { [key: string]: string } => {
+  try {
+    // Construct the path to package.json inside the project's node_modules
+    const packageJsonPath = path.join(projectDir, 'node_modules', packageName, 'package.json');
+
+    if (!fs.existsSync(packageJsonPath)) {
+      console.warn(`Warning: package.json for ${packageName} not found in ${projectDir}/node_modules`);
+      return {};
+    }
+
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const exportsField = packageJson.exports;
+    const resolvedEntries: { [key: string]: string } = {};
+
+    if (!exportsField) {
+      // If no exports field, fallback to "main"
+      resolvedEntries["."] = packageJson.main || "";
+      return resolvedEntries;
+    }
+
+    if (typeof exportsField === 'string') {
+      // If "exports" is a direct string, treat it as the main entry
+      resolvedEntries["."] = exportsField;
+      return resolvedEntries;
+    }
+
+    for (const [exportKey, exportPaths] of Object.entries(exportsField)) {
+      if (typeof exportPaths === 'string') {
+        if (!exportPaths.includes('package.json'))
+          resolvedEntries[exportKey] = exportPaths;
+      } else if (typeof exportPaths === 'object' && exportPaths !== null) {
+        const paths = exportPaths as { import?: string; default?: string };
+        resolvedEntries[exportKey] = paths.import ?? paths.default ?? "";
+      }
+    }
+
+    return resolvedEntries;
+  } catch (error) {
+    console.warn(`Warning: Could not resolve exports for ${packageName} in ${projectDir}`);
+    return {};
+  }
+};
+
+const generateImportStatementsWithExports = (dep: Dependency, projectDir: string): string => {
+  let importStatements = "";
+
+  // Skip if import is set to false
+  if (dep.import === false) {
+    return "";
+  }
+
+  const resolvedExports = resolvePackageExports(dep.name, projectDir);
+  console.log(`Resolved exports for ${dep.name}:`, resolvedExports);
+
+  for (const [exportKey, modulePath] of Object.entries(resolvedExports)) {
+    if (!modulePath) continue; // Skip empty paths
+
+    // Normalize the alias for the variable name (safe for JavaScript)
+    const alias = dep.alias || dep.name.replace(/[^a-zA-Z0-9]/g, '_'); // viem -> viem
+    const safeExportKey = exportKey.replace(/^\.\//, '').replace(/[^a-zA-Z0-9]/g, '_'); // ./op-stack -> op_stack
+
+    // Construct a valid import path by removing `./`
+    const importPath = exportKey === "." ? dep.name : `${dep.name}/${exportKey.replace(/^\.\//, '')}`;
+
+    let importStatement = "";
+    if (dep.require) {
+      // CommonJS require
+      importStatement = `const ${alias}${safeExportKey} = require('${importPath}');\n`;
+    } else {
+      // ES Module import
+      importStatement = `import * as ${alias}${safeExportKey} from '${importPath}';\n`;
+    }
+
+    // If windowImport is true, add the correct window assignment with the original path format
+    if (dep.windowImport !== false) {
+      const windowKey = `${dep.name}${exportKey === "." ? "" : "/" + exportKey.replace(/^\.\//, '')}`;
+      importStatement += `window['${windowKey}'] = ${alias}${safeExportKey};\n`;
+    }
+
+    importStatements += importStatement;
+  }
+
+  console.log(`Generated import statements for ${dep.name}:`, importStatements);
+  return importStatements;
+};
+
 const generateImportStatement = (dep: Dependency): string => {
   let importStatement = '';
 
@@ -283,15 +368,18 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   const packageJsonPath = path.join(projectDir, 'package.json');
   fs.writeFileSync(packageJsonPath, JSON.stringify(mergedPackageJson, null, 2));
 
+  console.log(`Installing project ${name} dependencies...`);
+  execSync(`./installProject.bash ${customName ? customName : name}`, { stdio: 'pipe' });
+
   // Generate TypeScript import statements
   let tsImports: string = '';
   [...dependencies].forEach(dep => {
-    tsImports += generateImportStatement(dep);
+    tsImports += (dep.resolveEports === true) ? generateImportStatementsWithExports(dep, projectDir) : generateImportStatement(dep)
   });
 
   [...cliDependencies].forEach(dep => {
     dep.windowImport = true;
-    tsImports += generateImportStatement(dep);
+    tsImports += (dep.resolveEports === true) ? generateImportStatementsWithExports(dep, projectDir) : generateImportStatement(dep)
   });
 
   // Combine imports and the processed template content
@@ -318,24 +406,24 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   copyTemplateFiles('tsconfig.json', name, templateDir, baseTemplateDir, tsconfigDir);
 
   // Change directory to the project folder and run yarn to install dependencies
-  console.log(`Installing dependencies in ${projectDir}...`);
+  console.log(`Building dependencies in ${projectDir}...`);
   // execSync('yarn install', { cwd: projectDir, stdio: 'inherit' });
   if (buildProjectArg) {
     try {
       // Execute the bash script
       const out = execSync(`./buildProject.bash ${customName ? customName : name}`, { stdio: 'pipe' });
-      
+
       // Convert the output buffer to a string and log it
       console.log(out.toString());
     } catch (error) {
-      
-      if((error as any).stderr) {
+
+      if ((error as any).stderr) {
         console.error((error as any).stderr.toString());
       }
-      if((error as any).stdout) {
+      if ((error as any).stdout) {
         console.error((error as any).stdout.toString());
       }
-      if((error as any).output) {
+      if ((error as any).output) {
         console.error((error as any).output.toString());
       }
       if (error instanceof Error) {
