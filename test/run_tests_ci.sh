@@ -5,7 +5,6 @@ set -e
 BUILD_ID=${CIRCLE_BUILD_NUM:-${TRAVIS_JOB_NUMBER}}
 echo "$BUILD_ID"
 TEST_EXITCODE=0
-npx ganache &
 yarn serve_script_runner &
 yarn serve_remix_live &
 sleep 10

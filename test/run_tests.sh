@@ -32,7 +32,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Start necessary services
-npx ganache &
 yarn serve_script_runner &
 if [ "$IS_LOCAL" = false ]; then
     yarn serve_remix_live &
