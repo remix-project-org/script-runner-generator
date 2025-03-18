@@ -292,7 +292,7 @@ export const projectConfigs: ProjectConfigurations = {
           resolveEports: true,
           require: true
         }, {
-          version: "^6",
+          version: "5.7.2",
           name: "ethers",
           alias: "ethersJS",
           import: true,
