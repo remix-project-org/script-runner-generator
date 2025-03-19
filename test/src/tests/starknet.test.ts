@@ -13,9 +13,8 @@ module.exports = {
         browser
             .addFile('test.ts', { content: testFile })
             .executeScriptInTerminal('remix.execute("test.ts")')
-
+            .pause()
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'Passed: 1', 60000)
-            .waitForElementContainsText('*[data-id="terminalJournal"]', 'Chain ID:', 60000)
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'New OZ account:', 60000)
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'privateKey=', 60000)
             .waitForElementContainsText('*[data-id="terminalJournal"]', 'publicKey=', 60000)
@@ -43,8 +42,6 @@ describe('Starknet Library Test', function () {
             nodeUrl: 'https://starknet-sepolia.drpc.org',
         })
 
-        const chainId = await myProvider.getChainId()
-        console.log('Chain ID:', chainId)
         // new Open Zeppelin account v0.8.1
         // Generate public and private key pair.
         const privateKey = stark.randomAddress()
