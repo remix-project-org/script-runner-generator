@@ -1024,9 +1024,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
-/*! Axios v1.8.2 Copyright (c) 2025 Matt Zabriskie and contributors */
-
-/*! MIT License. Copyright 2015-2022 Richard Moore <me@ricmoo.com>. See LICENSE.txt. */
+/*! Axios v1.8.3 Copyright (c) 2025 Matt Zabriskie and contributors */
 
 /*! crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
 
@@ -1036,17 +1034,9 @@ PERFORMANCE OF THIS SOFTWARE.
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
-/*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
-
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-
-/*! scure-base - MIT License (c) 2022 Paul Miller (paulmillr.com) */
-
-/*! scure-bip32 - MIT License (c) 2022 Patricio Palladino, Paul Miller (paulmillr.com) */
-
-/*! scure-bip39 - MIT License (c) 2022 Patricio Palladino, Paul Miller (paulmillr.com) */
 
 /**
  * [js-sha3]{@link https://github.com/emn178/js-sha3}
