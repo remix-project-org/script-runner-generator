@@ -285,14 +285,7 @@ export const projectConfigs: ProjectConfigurations = {
           windowImport: true
         },
         {
-          name: "viem",
-          version: "latest",
-          import: true,
-          windowImport: true,
-          resolveEports: true,
-          require: true
-        }, {
-          version: "^6",
+          version: "5.7.2",
           name: "ethers",
           alias: "ethersJS",
           import: true,
@@ -307,6 +300,12 @@ export const projectConfigs: ProjectConfigurations = {
           version: "latest",
           import: false,
           windowImport: false
+        }, {
+          name: "dotenv",
+          version: "16.4.7",
+          import: true,
+          require: true,
+          windowImport: true
         }
       ],
       replacements: {}

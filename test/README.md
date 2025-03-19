@@ -9,6 +9,7 @@ yarn && yarn build
 ```
 cd test
 yarn && yarn install
+yarn build:e2e
 yarn test
 ``` 
 or run a speficic test with
