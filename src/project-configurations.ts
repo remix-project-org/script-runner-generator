@@ -300,6 +300,12 @@ export const projectConfigs: ProjectConfigurations = {
           version: "latest",
           import: false,
           windowImport: false
+        }, {
+          name: "dotenv",
+          version: "16.4.7",
+          import: true,
+          require: true,
+          windowImport: true
         }
       ],
       replacements: {}
