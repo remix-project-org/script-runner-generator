@@ -68,7 +68,7 @@ project-configurations.ts contains an array of projects
     },
 
 ```
-- publish: Remix filters these, it won't show them it it's false
+- publish: Remix filters these, it won't show them if it's false
 - import: boolean // adds the import to the script-runner.ts
 - windowImport: boolean // means it will add window['multihashes'] = multihashes;
 - alias, ie: import * as ethersJS from 'ethers';
