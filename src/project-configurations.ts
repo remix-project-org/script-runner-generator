@@ -248,7 +248,7 @@ export const projectConfigs: ProjectConfigurations = {
       publish: true,
       dependencies: [
         {
-          version: "^1.0.0-beta.1",
+          version: "^1.0.0-beta.2",
           name: "@noir-lang/noir_wasm",
           import: true,
           windowImport: true
@@ -259,7 +259,7 @@ export const projectConfigs: ProjectConfigurations = {
           windowImport: true
         },
         {
-          version: "^0.76.4",
+          version: "^0.82.3",
           name: "@aztec/bb.js",
           import: true,
           windowImport: true
