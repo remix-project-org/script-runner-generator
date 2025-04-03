@@ -309,6 +309,31 @@ export const projectConfigs: ProjectConfigurations = {
         }
       ],
       replacements: {}
+    },{
+      name: "circles-sdk",
+      title: "Circles SDK",
+      description: "A configuration with Circles SDK",
+      publish: true,
+      dependencies: [
+        {
+          version: "^6",
+          name: "ethers",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },
+        {
+          version: "1.5.3",
+          name: "web3",
+          import: false,
+        },{
+          name: "@circles-sdk/sdk",
+          version: "^0.7.1",
+          import: true,
+          windowImport: true
+        }
+      ],
+      replacements: {}
     }
     // Add other projects here as needed
   ],
