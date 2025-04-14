@@ -292,6 +292,14 @@ export const projectConfigs: ProjectConfigurations = {
           windowImport: true,
         },
         {
+          name: "viem",
+          version: "latest",
+          import: true,
+          windowImport: true,
+          resolveEports: true,
+          require: true
+        },
+        {
           version: "1.5.3",
           name: "web3",
           import: false,
