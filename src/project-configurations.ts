@@ -293,7 +293,7 @@ export const projectConfigs: ProjectConfigurations = {
         },
         {
           name: "viem",
-          version: "latest",
+          version: "2.26.5",
           import: true,
           windowImport: true,
           resolveEports: true,
