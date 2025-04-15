@@ -251,6 +251,14 @@
         "windowImport": true
       },
       {
+        "name": "viem",
+        "version": "2.26.5",
+        "import": true,
+        "windowImport": true,
+        "resolveExports": true,
+        "require": true
+      },
+      {
         "version": "5.7.2",
         "name": "ethers",
         "alias": "ethersJS",
