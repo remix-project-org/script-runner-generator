@@ -285,6 +285,14 @@ export const projectConfigs: ProjectConfigurations = {
           windowImport: true
         },
         {
+          name: "viem",
+          version: "2.26.5",
+          import: true,
+          windowImport: true,
+          resolveEports: true,
+          require: true
+        },
+        {
           version: "5.7.2",
           name: "ethers",
           alias: "ethersJS",
