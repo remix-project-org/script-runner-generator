@@ -6,7 +6,7 @@ export interface Dependency {
   require?: boolean;
   windowImport?: boolean;
   windowAlias?: string;
-  resolveEports?: boolean;
+  resolvexEports?: boolean;
 }
 
 export interface Replacements {
@@ -289,7 +289,7 @@ export const projectConfigs: ProjectConfigurations = {
           version: "2.26.5",
           import: true,
           windowImport: true,
-          resolveEports: true,
+          resolvexEports: true,
           require: true
         },
         {
