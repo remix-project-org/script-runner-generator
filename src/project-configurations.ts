@@ -6,7 +6,7 @@ export interface Dependency {
   require?: boolean;
   windowImport?: boolean;
   windowAlias?: string;
-  resolveEports?: boolean;
+  resolveExports?: boolean;
 }
 
 export interface Replacements {
@@ -283,6 +283,14 @@ export const projectConfigs: ProjectConfigurations = {
           name: "@chainlink/ccip-js",
           import: true,
           windowImport: true
+        },
+        {
+          name: "viem",
+          version: "2.26.5",
+          import: true,
+          windowImport: true,
+          resolveExports: true,
+          require: true
         },
         {
           version: "5.7.2",
