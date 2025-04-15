@@ -374,12 +374,12 @@ projectConfigs.projects.forEach((project: ProjectConfiguration) => {
   // Generate TypeScript import statements
   let tsImports: string = '';
   [...dependencies].forEach(dep => {
-    tsImports += (dep.resolvexEports === true) ? generateImportStatementsWithExports(dep, projectDir) : generateImportStatement(dep)
+    tsImports += (dep.resolveExports === true) ? generateImportStatementsWithExports(dep, projectDir) : generateImportStatement(dep)
   });
 
   [...cliDependencies].forEach(dep => {
     dep.windowImport = true;
-    tsImports += (dep.resolvexEports === true) ? generateImportStatementsWithExports(dep, projectDir) : generateImportStatement(dep)
+    tsImports += (dep.resolveExports === true) ? generateImportStatementsWithExports(dep, projectDir) : generateImportStatement(dep)
   });
 
   // Combine imports and the processed template content
