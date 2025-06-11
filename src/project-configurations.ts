@@ -336,7 +336,7 @@ export const projectConfigs: ProjectConfigurations = {
           import: false,
         },{
           name: "@circles-sdk/sdk",
-          version: "0.27.2",
+          version: "0.28.0",
           import: true,
           windowImport: true
         }
