@@ -248,7 +248,7 @@ export const projectConfigs: ProjectConfigurations = {
       publish: true,
       dependencies: [
         {
-          version: "^1.0.0-beta.2",
+          version: "^1.0.0-beta.6",
           name: "@noir-lang/noir_wasm",
           import: true,
           windowImport: true
