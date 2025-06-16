@@ -40,7 +40,6 @@ module.exports = {
     },
     alias: {
       process: 'process/browser',
-      '@noir-lang/noir_wasm': path.resolve(__dirname, 'node_modules/@noir-lang/noir_wasm/dist/web/main.mjs'),
       '@aztec/bb.js': path.resolve(__dirname, 'node_modules/@aztec/bb.js/dest/browser/index.js'),
     }
   },
