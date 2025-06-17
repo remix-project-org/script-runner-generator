@@ -336,7 +336,12 @@ export const projectConfigs: ProjectConfigurations = {
           import: false,
         },{
           name: "@circles-sdk/sdk",
-          version: "0.28.0",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/pathfinder",
+          version: "0.29.0",
           import: true,
           windowImport: true
         }
