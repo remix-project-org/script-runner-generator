@@ -35,7 +35,7 @@ module.exports = {
       'child_process': false
     },
     alias: {
-      process: 'process/browser'
+      process: 'process/browser',
     }
   },
   module: {
