@@ -253,7 +253,7 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true
         }, {
-          version: "latest",
+          version: "1.0.0-beta.2",
           name: "@noir-lang/noir_js",
           import: true,
           windowImport: true
@@ -286,7 +286,7 @@ export const projectConfigs: ProjectConfigurations = {
         },
         {
           name: "viem",
-          version: "2.26.5",
+          version: "2.31.0",
           import: true,
           windowImport: true,
           resolveExports: true,
@@ -339,6 +339,22 @@ export const projectConfigs: ProjectConfigurations = {
           version: "^0.7.1",
           import: true,
           windowImport: true
+        }
+      ],
+      replacements: {}
+    },{
+      name: "viem",
+      title: "Viem",
+      description: "A configuration with Viem",
+      publish: true,
+      dependencies: [
+        {
+          name: "viem",
+          version: "2.31.0",
+          import: true,
+          windowImport: true,
+          resolveExports: true,
+          require: true
         }
       ],
       replacements: {}
