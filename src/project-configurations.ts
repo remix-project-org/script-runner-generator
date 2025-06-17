@@ -286,7 +286,7 @@ export const projectConfigs: ProjectConfigurations = {
         },
         {
           name: "viem",
-          version: "2.26.5",
+          version: "2.31.0",
           import: true,
           windowImport: true,
           resolveExports: true,
@@ -344,6 +344,22 @@ export const projectConfigs: ProjectConfigurations = {
           version: "0.29.0",
           import: true,
           windowImport: true
+        }
+      ],
+      replacements: {}
+    },{
+      name: "viem",
+      title: "Viem",
+      description: "A configuration with Viem",
+      publish: true,
+      dependencies: [
+        {
+          name: "viem",
+          version: "2.31.0",
+          import: true,
+          windowImport: true,
+          resolveExports: true,
+          require: true
         }
       ],
       replacements: {}
