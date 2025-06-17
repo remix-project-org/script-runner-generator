@@ -35,8 +35,7 @@ module.exports = {
       'child_process': false
     },
     alias: {
-      process: 'process/browser',
-      '@aztec/bb.js': path.resolve(__dirname, 'node_modules/@aztec/bb.js/dest/browser/index.js'),
+      process: 'process/browser'
     }
   },
   module: {
