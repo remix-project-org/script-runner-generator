@@ -2,7 +2,8 @@
 import { NightwatchBrowser } from 'nightwatch'
 import init from '../helpers/init'
 
-module.exports = {
+module.exports = {}
+const tests = {
     before: function (browser: NightwatchBrowser, done: VoidFunction) {
         init(browser, done, 'http://127.0.0.1:8080?plugins=solidity,udapp', false, {
             name: 'scriptRunner',
@@ -13,6 +14,7 @@ module.exports = {
         browser
             .addFile('test.ts', { content: testFile })
             .executeScriptInTerminal('remix.execute("test.ts")')
+            .pause()
             .waitForElementContainsText('*[data-id="terminalJournal"]', '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4', 60000)
     }
 }
