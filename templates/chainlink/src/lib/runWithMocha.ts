@@ -1,0 +1,1 @@
+const mocha: any = null
