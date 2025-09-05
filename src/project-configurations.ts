@@ -398,6 +398,31 @@ export const projectConfigs: ProjectConfigurations = {
         }
       ],
       replacements: {}
+    },{
+      name: "push",
+      title: "Push",
+      description: "A configuration with Push",
+      publish: true,
+      dependencies: [
+        {
+          name: "@pushchain/core",
+          version: "1.1.35",
+          import: true,
+          windowImport: true
+        },{
+          name: "ethers",
+          version: "^6",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },{
+          name: "bs58",
+          version: "6.0.0",
+          import: true,
+          windowImport: true
+        }
+      ],
+      replacements: {}
     }
     // Add other projects here as needed
   ],
