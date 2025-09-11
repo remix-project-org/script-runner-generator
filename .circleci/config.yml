@@ -1,114 +1,31 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/reference/configuration-reference
 version: 2.1
-orbs:
-  browser-tools: circleci/browser-tools@1.4.4
 
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/guides/orchestrate/jobs-steps/#jobs-overview & https://circleci.com/docs/reference/configuration-reference/#jobs
 jobs:
-  build:
-    parallelism: 6
-    machine:
-      image: ubuntu-2204:current
-    resource_class:
-      large
-    working_directory: ~/script-runner
-    steps:  # This is required to define the steps within the command
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-deps-{{ checksum "yarn.lock" }}
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-deps-
-      - run:
-          name: Install Dependencies
-          command: yarn
-      - save_cache:
-          key: v1-deps-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
-      - run:
-          name: Build Project
-          command: NODE_OPTIONS="--max-old-space-size=4096" bash ./ci/build.sh
-      ## persist the build
-      - run: sudo apt update && sudo apt install python3-pip -y zstd
-      - run: mkdir persist && tar -cf - build | zstd -1 -o persist/dist-$(date +%Y%m%d-%H%M%S-%3N)-$RANDOM.tar.zst
-      - persist_to_workspace:
-          root: .
-          paths:
-            - "persist"
-
-  test:
-    parallelism: 11
-    machine:
-      image: ubuntu-2204:current
-    resource_class:
-      large
-    working_directory: ~/script-runner
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-deps-{{ checksum "yarn.lock" }}
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-deps-
-      - attach_workspace:
-          at: .
-      - run: sudo apt update && sudo apt install python3-pip -y zstd
-      - run: for file in ./persist/*.zst; do zstd -d "$file"; done
-      - run: for tarfile in ./persist/*.tar; do tar -xf "$tarfile"; done
-      - run: 
-          name: check files
-          command: find build
-
-      - browser-tools/install-browser-tools:
-          install-firefox: false
-          install-chrome: true
-          install-chromedriver: false
-          install-geckodriver: false
-      - run:
-          name: Test
-          command: |
-            yarn
-            cd test
-            yarn install
-            yarn test_ci
-      - store_test_results:
-          path: ./test/reports/tests
-      - store_artifacts:
-          path: ./test/reports/screenshots
-
-  deploy:
+  say-hello:
+    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/guides/execution-managed/executor-intro/ & https://circleci.com/docs/reference/configuration-reference/#executor-job
     docker:
-      - image: cimg/node:20.0.0-browsers
-    working_directory: ~/script-runner
+      # Specify the version you desire here
+      # See: https://circleci.com/developer/images/image/cimg/base
+      - image: cimg/base:current
+
+    # Add steps to the job
+    # See: https://circleci.com/docs/guides/orchestrate/jobs-steps/#steps-overview & https://circleci.com/docs/reference/configuration-reference/#steps
     steps:
+      # Checkout the code as the first step.
       - checkout
-      - attach_workspace:
-          at: .
-      - run: sudo apt update && sudo apt install python3-pip -y zstd
-      - run: for file in ./persist/*.zst; do zstd -d "$file"; done
-      - run: for tarfile in ./persist/*.tar; do tar -xf "$tarfile"; done
-      - run: yarn && yarn check:projects
-      - run: git checkout gh-pages
-      - run: git checkout main -- ci/deploy.sh
-      - run: git checkout main -- .gitignore
-      - run: 
-          name: check files
-          command: find build
       - run:
-          name: Deploy
-          command: |
-            ./ci/deploy.sh
+          name: "Say hello"
+          command: "echo Hello, World!"
+
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/guides/orchestrate/workflows/ & https://circleci.com/docs/reference/configuration-reference/#workflows
 workflows:
-  version: 2
-  main_workflow:
+  say-hello-workflow: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build
-      - test:
-          requires:
-            - build
-      - deploy:
-          requires:
-            - build
-            - test
-          filters:
-            branches:
-              only: main
+      - say-hello
