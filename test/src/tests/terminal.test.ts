@@ -93,7 +93,7 @@ module.exports = {
 
   },
 
-  'Deploy "Owner" using an ether.js script, listen to event and check event are logged in the terminal #group4': function (browser: NightwatchBrowser) {
+  'compile-action, listen to event and check event are logged in the terminal #group4': function (browser: NightwatchBrowser) {
     browser
       .clickLaunchIcon('solidity')
       .click('.remixui_compilerConfigSection')

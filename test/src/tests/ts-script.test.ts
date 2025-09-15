@@ -16,12 +16,12 @@ module.exports = {
         .waitForElementVisible('*[data-id="treeViewLitreeViewItemcontracts/1_Storage.sol"]')
         .click('*[data-id="treeViewLitreeViewItemcontracts/1_Storage.sol"]')
         .pause(2000)
-        .click('[data-id="play-editor"]')
+        .click('[data-id="compile-action"]')
         .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts"]')
         .click('*[data-id="treeViewLitreeViewItemscripts"]')
         .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts/deploy_with_web3.ts"]')
         .click('*[data-id="treeViewLitreeViewItemscripts/deploy_with_web3.ts"]')
-        .click('[data-id="play-editor"]')
+        .click('[data-id="compile-action"]')
         .waitForElementContainsText('*[data-id="terminalJournal"]', 'deploying Storage', 60000)
         .waitForElementContainsText('*[data-id="terminalJournal"]', '0xd9145CCE52D386f254917e481eB44e9943F39138', 60000)
   },
@@ -29,7 +29,7 @@ module.exports = {
     browser
         .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts/deploy_with_ethers.ts"]')
         .click('*[data-id="treeViewLitreeViewItemscripts/deploy_with_ethers.ts"]')
-        .click('[data-id="play-editor"]')
+        .click('[data-id="compile-action"]')
         .waitForElementContainsText('*[data-id="terminalJournal"]', 'deploying Storage', 60000)
         .waitForElementContainsText('*[data-id="terminalJournal"]', '0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8', 60000)
   }
