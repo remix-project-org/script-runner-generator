@@ -336,9 +336,49 @@ export const projectConfigs: ProjectConfigurations = {
           import: false,
         },{
           name: "@circles-sdk/sdk",
-          version: "^0.7.1",
+          version: "0.29.0",
           import: true,
           windowImport: true
+        },{
+          name: "@circles-sdk/pathfinder",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/adapter-ethers",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/utils",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/abi-v1",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/abi-v2",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/data",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "@circles-sdk/profiles",
+          version: "0.29.0",
+          import: true,
+          windowImport: true
+        },{
+          name: "multihashes",
+          version: "^4.0.3",
+          import: true,
+          windowImport: true,
         }
       ],
       replacements: {}
