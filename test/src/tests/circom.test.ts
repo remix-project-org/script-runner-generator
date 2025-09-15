@@ -15,8 +15,8 @@ module.exports = {
     browser
       //.clickLaunchIcon('filePanel')
       .pause(2000)
-      .waitForElementVisible('*[data-id="workspacesMenuDropdown"]')
-      .click('*[data-id="workspacesMenuDropdown"]')
+      .waitForElementVisible('*[data-id="workspacesSelect"]')
+      .click('*[data-id="workspacesSelect"]')
       .click('*[data-id="workspacecreate"]')
       .waitForElementPresent('*[data-id="create-semaphore"]')
       .scrollAndClick('*[data-id="create-semaphore"]')
