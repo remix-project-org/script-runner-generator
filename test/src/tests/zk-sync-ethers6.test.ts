@@ -16,7 +16,7 @@ module.exports = {
             .waitForElementVisible('*[data-id="treeViewLitreeViewItemcontracts/1_Storage.sol"]')
             .click('*[data-id="treeViewLitreeViewItemcontracts/1_Storage.sol"]')
             .pause(2000)
-            .click('*[data-id="play-editor"]') // run the script
+            .click('*[data-id="compile-action"]') // run the script
             .pause(1000)
             .clickLaunchIcon('udapp')
             .waitForElementVisible('*[data-id="Deploy - transact (not payable)"]')

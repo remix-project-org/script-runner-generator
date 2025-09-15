@@ -39,7 +39,7 @@ module.exports = {
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_trusted_setup.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')
       .waitForElementVisible('[data-id="verticalIconsKindcircuit-compiler"]')
-      .click('[data-id="play-editor"]')
+      .click('[data-id="compile-action"]')
       .waitForElementPresent({
         locateStrategy: 'xpath',
         selector: "//span[@class='text-log' and contains(text(), 'plonk setup')]",
@@ -59,7 +59,7 @@ module.exports = {
       .click('[data-id="treeViewLitreeViewItemscripts/plonk/plonk_zkproof.ts"]')
       .waitForElementPresent('[data-id="verticalIconsKindcircuit-compiler"]')
       .waitForElementVisible('[data-id="verticalIconsKindcircuit-compiler"]')
-      .click('[data-id="play-editor"]')
+      .click('[data-id="compile-action"]')
       .waitForElementPresent({
         locateStrategy: 'xpath',
         selector: "//span[@class='text-log' and contains(text(), 'proof done')]",
