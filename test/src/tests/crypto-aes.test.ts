@@ -14,8 +14,8 @@ module.exports = {
         .waitForElementVisible('*[data-id="treeViewLitreeViewItemscripts"]')
         .click('*[data-id="treeViewLitreeViewItemscripts"]')
         .addFile('crypto-aes.ts', { content: testScript })
-        .waitForElementVisible('[data-id="play-editor"]')
-        .click('[data-id="play-editor"]')
+        .waitForElementVisible('[data-id="compile-action"]')
+        .click('[data-id="compile-action"]')
         .waitForElementContainsText('*[data-id="terminalJournal"]', 'aes-js functionality test PASSED!', 60000)
         .waitForElementContainsText('*[data-id="terminalJournal"]', 'crypto-js functionality test PASSED!', 60000)
   }
