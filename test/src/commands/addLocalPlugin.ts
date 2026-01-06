@@ -1,6 +1,6 @@
 import { NightwatchBrowser } from 'nightwatch'
 import EventEmitter from 'events'
-import { ExternalProfile, LocationProfile, Profile } from '@remixproject/plugin-utils'
+import { ExternalProfile, LocationProfile, Profile } from '@remix-project/plugin-utils'
 
 class AddLocalPlugin extends EventEmitter {
   command (this: NightwatchBrowser, profile: Profile & LocationProfile & ExternalProfile, focus: boolean): NightwatchBrowser {
