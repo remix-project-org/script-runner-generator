@@ -1,5 +1,5 @@
-import { createClient } from '@remixproject/plugin-iframe'
-import { PluginClient } from '@remixproject/plugin'
+import { createClient } from '@remix-project/plugin-iframe'
+import { PluginClient } from '@remix-project/plugin'
 import { TranspileOutput } from "typescript"
 import * as path from 'path'
 import './runWithMocha'

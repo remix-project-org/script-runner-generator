@@ -48,6 +48,12 @@ module.exports = {
         use: 'ts-loader', // Use ts-loader to transpile TypeScript files
         exclude: /node_modules/,
       },
+      {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false, // Disables the check for the mandatory extension
+        }
+      }
     ],
   },
   experiments: {
