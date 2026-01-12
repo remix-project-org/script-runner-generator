@@ -77,6 +77,12 @@ export const projectConfigs: ProjectConfigurations = {
           windowAlias: "_starknet"
         },
         {
+          version: "^4.3.6",
+          name: "chai",
+          import: true,
+          windowImport: true,
+        },
+        {
           version: "0.7.0",
           name: "snarkjs",
           import: true,
