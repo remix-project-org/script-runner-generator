@@ -77,6 +77,12 @@ export const projectConfigs: ProjectConfigurations = {
           windowAlias: "_starknet"
         },
         {
+          version: "^4.3.6",
+          name: "chai",
+          import: true,
+          windowImport: true,
+        },
+        {
           version: "0.7.0",
           name: "snarkjs",
           import: true,
@@ -209,8 +215,13 @@ export const projectConfigs: ProjectConfigurations = {
           version: "1.5.3",
           name: "web3",
           import: false,
+        },
+        {
+          version: "^4.3.6",
+          name: "chai",
+          import: true,
+          windowImport: true,
         }
-
       ],
       replacements: {
       },
