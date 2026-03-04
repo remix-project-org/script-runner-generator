@@ -406,7 +406,7 @@ export const projectConfigs: ProjectConfigurations = {
       dependencies: [
         {
           name: "@pushchain/core",
-          version: "2.0.16",
+          version: "4.0.13",
           import: true,
           windowImport: true
         },{
