@@ -410,6 +410,11 @@ export const projectConfigs: ProjectConfigurations = {
           import: true,
           windowImport: true
         },{
+          name: "@coral-xyz/anchor",
+          version: "^0.31.1",
+          import: false,
+          windowImport: false
+        },{
           name: "ethers",
           version: "^6",
           alias: "ethersJS",
