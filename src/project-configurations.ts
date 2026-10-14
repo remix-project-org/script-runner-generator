@@ -428,6 +428,33 @@ export const projectConfigs: ProjectConfigurations = {
         }
       ],
       replacements: {}
+    },{
+      name: "arkiv-network",
+      title: "Arkiv Network",
+      description: "A configuration with Viem, Ethers 6 and Arkiv Network SDK",
+      publish: true,
+      dependencies: [
+        {
+          name: "viem",
+          version: "^2.57.7",
+          import: true,
+          windowImport: true,
+          resolveExports: true,
+          require: true
+        },{
+          name: "ethers",
+          version: "^6",
+          alias: "ethersJS",
+          import: true,
+          windowImport: true,
+        },{
+          name: "@arkiv-network/sdk",
+          version: "latest",
+          import: true,
+          windowImport: true
+        }
+      ],
+      replacements: {}
     }
     // Add other projects here as needed
   ],
